@@ -1,0 +1,98 @@
+{
+    "common": {
+        "name": "luxtronik2",
+        "version": "0.0.1",
+        "news": {
+            "0.0.1": {
+                "en": "initial release",
+                "de": "Erstveröffentlichung",
+                "ru": "Начальная версия",
+                "pt": "lançamento inicial",
+                "nl": "Eerste uitgave",
+                "fr": "Première version",
+                "it": "Versione iniziale",
+                "es": "Versión inicial",
+                "pl": "Pierwsze wydanie",
+                "zh-cn": "首次出版"
+            }
+        },
+        "title": "Luxtronik 2",
+        "titleLang": {
+            "en": "Luxtronik 2",
+            "de": "Luxtronik 2",
+            "ru": "Люкстроник 2",
+            "pt": "Luxtronik 2",
+            "nl": "Luxtronik 2",
+            "fr": "Luxtronik 2",
+            "it": "Luxtronik 2",
+            "es": "Luxtronik 2",
+            "pl": "Luxtronik 2",
+            "zh-cn": "Luxtronik 2"
+        },
+        "desc": {
+            "en": "Connects to Luxtronik 2 heatpump controllers over LAN and WebSocket",
+            "de": "Verbindung zu Luxtronik 2 Heatpump-Controllern über LAN und WebSocket",
+            "ru": "Подключается к контроллерам теплового насоса Luxtronik 2 через LAN и WebSocket",
+            "pt": "Conecta-se a controladores de bomba de calor Luxtronik 2 por LAN e WebSocket",
+            "nl": "Verbindt met Luxtronik 2 warmtepompcontrollers via LAN en WebSocket",
+            "fr": "Se connecte aux contrôleurs de pompe à chaleur Luxtronik 2 via LAN et WebSocket",
+            "it": "Si collega ai controller della pompa di calore Luxtronik 2 su LAN e WebSocket",
+            "es": "Se conecta a controladores de bomba de calor Luxtronik 2 a través de LAN y WebSocket",
+            "pl": "Łączy się ze sterownikami pompy ciepła Luxtronik 2 przez LAN i WebSocket",
+            "zh-cn": "通过LAN和WebSocket连接到Luxtronik 2热泵控制器"
+        },
+        "authors": ["UncleSamSwiss <samuel.weibel@gmail.com>"],
+        "keywords": ["heatpump", "websocket", "luxtronik"],
+        "license": "Apache-2.0",
+        "platform": "Javascript/Node.js",
+        "main": "build/main.js",
+        "icon": "luxtronik2.png",
+        "enabled": true,
+        "extIcon": "https://raw.githubusercontent.com/UncleSamSwiss/ioBroker.luxtronik2/master/admin/luxtronik2.png",
+        "readme": "https://github.com/UncleSamSwiss/ioBroker.luxtronik2/blob/master/README.md",
+        "loglevel": "info",
+        "mode": "daemon",
+        "type": "climate-control",
+        "compact": true,
+        "connectionType": "local",
+        "dataSource": "poll",
+        "materialize": true,
+        "dependencies": [
+            {
+                "js-controller": ">=2.0.0"
+            }
+        ]
+    },
+    "encryptedNative": ["password"],
+    "protectedNative": ["password"],
+    "native": {
+        "host": "127.0.0.1",
+        "port": 8214,
+        "password": "",
+        "refreshInterval": 5
+    },
+    "objects": [],
+    "instanceObjects": [
+        {
+            "_id": "info",
+            "type": "channel",
+            "common": {
+                "name": "Information"
+            },
+            "native": {}
+        },
+        {
+            "_id": "info.connection",
+            "type": "state",
+            "common": {
+                "role": "indicator.connected",
+                "name": "Device or service connected",
+                "type": "boolean",
+                "read": true,
+                "write": false,
+                "def": false
+            },
+            "native": {}
+        }
+    ]
+}
