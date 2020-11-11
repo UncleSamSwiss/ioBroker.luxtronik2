@@ -291,16 +291,15 @@ class Luxtronik2 extends utils.Adapter {
                         }
                     }
                 }
-
-                if (shouldSave) {
-                    this.log.debug('Saving');
-                    this.ws.send('SAVE;1');
-                    this.isSaving = true;
-                    return;
-                }
             }
 
-            this.requestNextContent();
+            if (shouldSave) {
+                this.log.debug('Saving');
+                this.ws.send('SAVE;1');
+                this.isSaving = true;
+            } else {
+                this.requestNextContent();
+            }
         }
     }
 
