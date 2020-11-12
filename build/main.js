@@ -58,11 +58,11 @@ class Luxtronik2 extends utils.Adapter {
         this.createWebSocket();
         if (this.config.useLuxProxy) {
             await this.createLuxTreeAsync();
-            this.createLuxtronicProxy();
+            this.createLuxtronikProxy();
         }
         else if (this.config.luxPort) {
             await this.createLuxTreeAsync();
-            this.createLuxtronicConnection(this.config.host, this.config.luxPort);
+            this.createLuxtronikConnection(this.config.host, this.config.luxPort);
         }
     }
     createWebSocket() {
@@ -140,7 +140,7 @@ class Luxtronik2 extends utils.Adapter {
             }
         }
     }
-    createLuxtronicConnection(host, port) {
+    createLuxtronikConnection(host, port) {
         if (!port) {
             return;
         }
@@ -151,20 +151,20 @@ class Luxtronik2 extends utils.Adapter {
     requestLuxtronikData() {
         this.luxtronik.read((err, data) => {
             if (err) {
-                this.log.error(`Luxtronic read error: ${err}`);
+                this.log.error(`Luxtronik read error: ${err}`);
                 this.luxRefreshTimeout = setTimeout(() => this.requestLuxtronikData(), this.config.refreshInterval * 1000);
                 return;
             }
             this.setState('info.connection', true, true);
-            this.handleLuxtronikDataAsync(data).catch((e) => this.log.error(`Couldn't handle luxtronic data ${e}`));
+            this.handleLuxtronikDataAsync(data).catch((e) => this.log.error(`Couldn't handle luxtronik data ${e}`));
         });
     }
     /**
-     * Creates a TCP proxy for the Luxtronic port.
+     * Creates a TCP proxy for the Luxtronik port.
      * This is required in some instances because the underlying library expects
      * all data to arrive in a single batch (which it sometimes doesn't).
      */
-    createLuxtronicProxy() {
+    createLuxtronikProxy() {
         const localhost = '127.0.0.1';
         this.proxyServer = net_1.createServer((client) => {
             this.log.debug('Received proxy connect');
@@ -175,7 +175,7 @@ class Luxtronik2 extends utils.Adapter {
             });
             forward.on('close', () => {
                 client.end();
-                this.log.debug('Luxtronic closed proxy connection');
+                this.log.debug('Luxtronik closed proxy connection');
             });
             client.on('data', (data) => {
                 this.log.silly(`Received ${data.length} bytes from client`);
@@ -184,7 +184,7 @@ class Luxtronik2 extends utils.Adapter {
             let receiveBuffer;
             let receiveTimeout;
             forward.on('data', (data) => {
-                this.log.silly(`Received ${data.length} bytes from Luxtronic`);
+                this.log.silly(`Received ${data.length} bytes from Luxtronik`);
                 if (receiveTimeout) {
                     clearTimeout(receiveTimeout);
                 }
@@ -207,7 +207,7 @@ class Luxtronik2 extends utils.Adapter {
             var _a;
             const port = ((_a = this.proxyServer) === null || _a === void 0 ? void 0 : _a.address()).port;
             this.log.info(`Proxy listening on port ${port}`);
-            this.createLuxtronicConnection(localhost, port);
+            this.createLuxtronikConnection(localhost, port);
         });
         this.proxyServer.listen(undefined, localhost);
     }

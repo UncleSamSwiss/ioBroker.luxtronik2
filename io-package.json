@@ -4,7 +4,16 @@
         "version": "0.0.2",
         "news": {
             "0.0.2": {
-                "en": "Added support for the Luxtronik protocol"
+                "en": "Added support for the Luxtronik protocol",
+                "de": "Unterstützung für das Luxtronik-Protokoll hinzugefügt",
+                "ru": "Добавлена ​​поддержка протокола Luxtronik.",
+                "pt": "Adicionado suporte para o protocolo Luxtronik",
+                "nl": "Ondersteuning toegevoegd voor het Luxtronik-protocol",
+                "fr": "Ajout de la prise en charge du protocole Luxtronik",
+                "it": "Aggiunto supporto per il protocollo Luxtronik",
+                "es": "Soporte agregado para el protocolo Luxtronik",
+                "pl": "Dodano obsługę protokołu Luxtronik",
+                "zh-cn": "增加了对Luxtronik协议的支持"
             },
             "0.0.1": {
                 "en": "initial release",
@@ -44,8 +53,14 @@
             "pl": "Łączy się ze sterownikami pompy ciepła Luxtronik 2 przez LAN i WebSocket",
             "zh-cn": "通过LAN和WebSocket连接到Luxtronik 2热泵控制器"
         },
-        "authors": ["UncleSamSwiss <samuel.weibel@gmail.com>"],
-        "keywords": ["heatpump", "websocket", "luxtronik"],
+        "authors": [
+            "UncleSamSwiss <samuel.weibel@gmail.com>"
+        ],
+        "keywords": [
+            "heatpump",
+            "websocket",
+            "luxtronik"
+        ],
         "license": "Apache-2.0",
         "platform": "Javascript/Node.js",
         "main": "build/main.js",
@@ -66,8 +81,12 @@
             }
         ]
     },
-    "encryptedNative": ["password"],
-    "protectedNative": ["password"],
+    "encryptedNative": [
+        "password"
+    ],
+    "protectedNative": [
+        "password"
+    ],
     "native": {
         "host": "127.0.0.1",
         "port": 8214,

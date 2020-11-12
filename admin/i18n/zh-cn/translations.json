@@ -1,0 +1,9 @@
+{
+    "host": "主机名/ IP地址",
+    "luxPort": "Luxtronik港口",
+    "luxtronik2 adapter settings": "luxtronik2的适配器设置",
+    "password": "密码",
+    "port": "WebSocket端口",
+    "refreshInterval": "刷新间隔",
+    "seconds": "秒"
+}

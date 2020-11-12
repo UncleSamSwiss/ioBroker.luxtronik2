@@ -1,0 +1,9 @@
+{
+    "host": "Nome do host / endereço IP",
+    "luxPort": "Porto Luxtronik",
+    "luxtronik2 adapter settings": "Configurações do adaptador para luxtronik2",
+    "password": "Senha",
+    "port": "Porta WebSocket",
+    "refreshInterval": "Intervalo de atualização",
+    "seconds": "segundos"
+}
