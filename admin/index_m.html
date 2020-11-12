@@ -46,6 +46,8 @@
                     var $this = $(this);
                     if ($this.attr('type') === 'checkbox') {
                         obj[$this.attr('id')] = $this.prop('checked');
+                    } else if ($this.attr('type') === 'number') {
+                        obj[$this.attr('id')] = parseInt($this.val());
                     } else {
                         obj[$this.attr('id')] = $this.val();
                     }
@@ -67,21 +69,25 @@
 
             <!-- For example columns with settings: -->
             <div class="row">
-                <div class="col s6 input-field">
+                <div class="col s4 input-field">
                     <input type="text" class="value" id="host" />
                     <label for="host" class="translate">host</label>
                 </div>
-                <div class="col s6 input-field">
+                <div class="col s4 input-field">
                     <input type="number" class="value" id="port" />
                     <label for="port" class="translate">port</label>
                 </div>
+                <div class="col s4 input-field">
+                    <input type="number" class="value" id="luxPort" />
+                    <label for="luxPort" class="translate">luxPort</label>
+                </div>
             </div>
             <div class="row">
-                <div class="col s6 input-field">
+                <div class="col s4 input-field">
                     <input type="password" autocomplete="off" class="value" id="password" />
                     <label for="password" class="translate">password</label>
                 </div>
-                <div class="col s6 input-field">
+                <div class="col s4 input-field">
                     <input type="number" class="value" id="refreshInterval" />
                     <label for="refreshInterval" class="translate">refreshInterval</label>
                     <span class="helper-text" class="translate">seconds</span>

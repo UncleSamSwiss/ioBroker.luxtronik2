@@ -18,7 +18,10 @@ systemDictionary = {
         en: 'Hostname / IP Address',
     },
     port: {
-        en: 'Port',
+        en: 'WebSocket Port',
+    },
+    luxPort: {
+        en: 'Luxtronic Port',
     },
     password: {
         en: 'Password',

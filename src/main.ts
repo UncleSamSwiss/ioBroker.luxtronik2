@@ -1,10 +1,9 @@
 /*
  * Created with @iobroker/create-adapter v1.30.1
  */
-
-// The adapter-core module gives you access to the core ioBroker functions
-// you need to create an adapter
 import * as utils from '@iobroker/adapter-core';
+import luxtronik from 'luxtronik2';
+import { AddressInfo, createConnection, createServer, Server } from 'net';
 import WebSocket from 'ws';
 import { parseStringPromise } from 'xml2js';
 import {
@@ -17,12 +16,12 @@ import {
     ReadOnlyContentItem,
     SelectContentItem,
 } from './lux-messages';
-
-// Load your modules here, e.g.:
-// import * as fs from "fs";
+import { luxMeta } from './lux-meta';
 
 class Luxtronik2 extends utils.Adapter {
-    private ws!: WebSocket;
+    private webSocket?: WebSocket;
+    private luxtronik?: any;
+    private proxyServer?: Server;
 
     private closing = false;
 
@@ -31,7 +30,8 @@ class Luxtronik2 extends utils.Adapter {
 
     private handlers: Record<string, ItemHandler<any>> = {};
 
-    private refreshTimeout?: NodeJS.Timeout;
+    private wsRefreshTimeout?: NodeJS.Timeout;
+    private luxRefreshTimeout?: NodeJS.Timeout;
 
     private requestedUpdates: { id: string; value: string | number }[] = [];
     private isSaving = false;
@@ -44,8 +44,6 @@ class Luxtronik2 extends utils.Adapter {
         });
         this.on('ready', this.onReady.bind(this));
         this.on('stateChange', this.onStateChange.bind(this));
-        // this.on('objectChange', this.onObjectChange.bind(this));
-        // this.on('message', this.onMessage.bind(this));
         this.on('unload', this.onUnload.bind(this));
     }
 
@@ -58,25 +56,45 @@ class Luxtronik2 extends utils.Adapter {
         // Reset the connection indicator during startup
         this.setState('info.connection', false, true);
 
-        const uri = 'ws://' + this.config.host + ':' + this.config.port;
-        const login = 'LOGIN;' + this.config.password;
+        this.createWebSocket();
+        if (this.config.useLuxProxy) {
+            await this.createLuxTreeAsync();
+            this.createLuxtronicProxy();
+        } else if (this.config.luxPort) {
+            await this.createLuxTreeAsync();
+            this.createLuxtronicConnection(this.config.host, this.config.luxPort);
+        }
+    }
 
-        this.ws = new WebSocket(uri, 'Lux_WS');
+    private createWebSocket(): void {
+        if (!this.config.port) {
+            return;
+        }
 
-        this.ws.on('open', () => {
+        const uri = `ws://${this.config.host}:${this.config.port}`;
+        const login = `LOGIN;${this.config.password}`;
+
+        this.webSocket = new WebSocket(uri, 'Lux_WS');
+        this.log.info('Connecting to ' + uri);
+
+        this.webSocket.on('open', () => {
             try {
                 this.log.info('Connected to ' + uri);
-                this.ws.send(login);
-                this.ws.send('REFRESH');
+                this.webSocket?.send(login);
+                this.webSocket?.send('REFRESH');
                 this.setState('info.connection', true, true);
             } catch (e) {
-                this.ws.close();
+                this.log.error(`Couldn't send login, ${e}`);
+                this.webSocket?.close();
             }
         });
 
-        this.ws.on('message', (msg: string) => this.handleWsMessage(msg));
+        this.webSocket.on('message', (msg: string) => this.handleWsMessage(msg));
 
-        this.ws.on('error', (err: Error) => {
+        this.webSocket.on('error', (err: Error) => {
+            if (this.closing) {
+                return;
+            }
             this.log.error(`Got WebSocket error ${err}`);
 
             // not available in unit tests
@@ -85,7 +103,10 @@ class Luxtronik2 extends utils.Adapter {
             }
         });
 
-        this.ws.on('close', () => {
+        this.webSocket.on('close', () => {
+            if (this.closing) {
+                return;
+            }
             this.log.error('Got unexpected close event');
 
             // not available in unit tests
@@ -95,17 +116,135 @@ class Luxtronik2 extends utils.Adapter {
         });
     }
 
+    private async createLuxTreeAsync(): Promise<void> {
+        for (const sectionName in luxMeta) {
+            const section = luxMeta[sectionName];
+            await this.extendObjectAsync(sectionName, {
+                type: 'channel',
+                common: {
+                    name: sectionName,
+                },
+            });
+            for (const itemName in section) {
+                const item = section[itemName];
+                const id = `${sectionName}.${itemName}`;
+                await this.extendObjectAsync(id, {
+                    type: 'state',
+                    common: {
+                        name: itemName,
+                        read: true,
+                        write: !!item.writeName,
+                        type: item.type,
+                        role: item.role,
+                        unit: item.unit,
+                        min: item.min,
+                        max: item.max,
+                        states: item.states,
+                    },
+                });
+                if (item.writeName) {
+                    this.subscribeStates(id);
+                }
+            }
+        }
+    }
+
+    private createLuxtronicConnection(host: string, port: number): void {
+        if (!port) {
+            return;
+        }
+
+        this.log.info(`Connecting to ${host}:${port}`);
+        this.luxtronik = new luxtronik.createConnection(host, port);
+        this.requestLuxtronikData();
+    }
+
+    private requestLuxtronikData(): void {
+        this.luxtronik.read((err: any, data: Record<string, Record<string, string | number>>) => {
+            if (err) {
+                this.log.error(`Luxtronic read error: ${err}`);
+                this.luxRefreshTimeout = setTimeout(
+                    () => this.requestLuxtronikData(),
+                    this.config.refreshInterval * 1000,
+                );
+                return;
+            }
+
+            this.setState('info.connection', true, true);
+            this.handleLuxtronikDataAsync(data).catch((e) => this.log.error(`Couldn't handle luxtronic data ${e}`));
+        });
+    }
+
+    /**
+     * Creates a TCP proxy for the Luxtronic port.
+     * This is required in some instances because the underlying library expects
+     * all data to arrive in a single batch (which it sometimes doesn't).
+     */
+    private createLuxtronicProxy(): void {
+        const localhost = '127.0.0.1';
+        this.proxyServer = createServer((client) => {
+            this.log.debug('Received proxy connect');
+            const forward = createConnection(this.config.luxPort, this.config.host);
+            client.on('close', () => {
+                forward.end();
+                this.log.debug('Client closed proxy connection');
+            });
+            forward.on('close', () => {
+                client.end();
+                this.log.debug('Luxtronic closed proxy connection');
+            });
+            client.on('data', (data) => {
+                this.log.silly(`Received ${data.length} bytes from client`);
+                forward.write(data);
+            });
+
+            let receiveBuffer: Buffer | undefined;
+            let receiveTimeout: NodeJS.Timeout | undefined;
+            forward.on('data', (data) => {
+                this.log.silly(`Received ${data.length} bytes from Luxtronic`);
+                if (receiveTimeout) {
+                    clearTimeout(receiveTimeout);
+                }
+
+                if (receiveBuffer) {
+                    receiveBuffer = Buffer.concat([receiveBuffer, data]);
+                } else {
+                    receiveBuffer = Buffer.from(data);
+                }
+
+                receiveTimeout = setTimeout(() => {
+                    if (receiveBuffer) {
+                        this.log.silly(`Sending ${receiveBuffer.length} bytes to client`);
+                        client.write(receiveBuffer);
+                        receiveBuffer = undefined;
+                    }
+                }, 100);
+            });
+        });
+        this.proxyServer.on('listening', () => {
+            const port = (this.proxyServer?.address() as AddressInfo).port;
+            this.log.info(`Proxy listening on port ${port}`);
+            this.createLuxtronicConnection(localhost, port);
+        });
+        this.proxyServer.listen(undefined, localhost);
+    }
+
     /**
      * Is called when adapter shuts down - callback has to be called under any circumstances!
      */
     private onUnload(callback: () => void): void {
         try {
             this.closing = true;
-            if (this.refreshTimeout) {
-                clearTimeout(this.refreshTimeout);
+            if (this.wsRefreshTimeout) {
+                clearTimeout(this.wsRefreshTimeout);
+            }
+            if (this.luxRefreshTimeout) {
+                clearTimeout(this.luxRefreshTimeout);
             }
 
-            this.ws.close();
+            this.webSocket?.close();
+
+            this.proxyServer?.close();
 
             callback();
         } catch (e) {
@@ -122,14 +261,74 @@ class Luxtronik2 extends utils.Adapter {
         }
 
         // The state was changed from the outside
-        this.log.debug(`state ${id} changed: ${state.val}`);
+        this.log.debug(`state ${id} changed: ${JSON.stringify(state.val)}`);
         const idParts = id.split('.');
         idParts.shift(); // remove adapter name
         idParts.shift(); // remove instance number
 
+        const luxSection = luxMeta[idParts[0]];
+        if (luxSection && luxSection[idParts[1]]) {
+            const meta = luxSection[idParts[1]];
+            if (!meta.writeName) {
+                return;
+            }
+
+            if (this.luxRefreshTimeout) {
+                clearTimeout(this.luxRefreshTimeout);
+            }
+            this.log.debug(`Setting ${meta.writeName} to ${state.val}`);
+            this.luxtronik?.write(meta.writeName, state.val, (err: any, _result: any) => {
+                if (err) {
+                    this.log.error(`Coudln't set ${id}: ${err}`);
+                }
+                this.requestLuxtronikData();
+            });
+            return;
+        }
+
         this.requestedUpdates.push({ id: idParts.join('.'), value: state.val as string | number });
         if (this.requestedUpdates.length === 1) {
             this.handleNextUpdate();
+        }
+    }
+
+    private async handleLuxtronikDataAsync(data: Record<string, Record<string, string | number>>): Promise<void> {
+        try {
+            for (const sectionName in data) {
+                if (!luxMeta[sectionName]) {
+                    continue;
+                }
+                const section = data[sectionName];
+                for (const itemName in section) {
+                    const meta = luxMeta[sectionName][itemName];
+                    if (!meta) {
+                        continue;
+                    }
+
+                    const value = section[itemName];
+                    let stateValue: string | number | boolean | undefined;
+                    if (meta.type === 'number') {
+                        stateValue = value === 'no' ? undefined : value;
+                    } else if (meta.type === 'boolean') {
+                        switch (value) {
+                            case 'on':
+                                stateValue = true;
+                                break;
+                            case 'off':
+                                stateValue = false;
+                                break;
+                            default:
+                                stateValue = undefined;
+                                break;
+                        }
+                    } else {
+                        stateValue = value;
+                    }
+                    await this.setStateValueAsync(`${sectionName}.${itemName}`, stateValue);
+                }
+            }
+        } finally {
+            this.luxRefreshTimeout = setTimeout(() => this.requestLuxtronikData(), this.config.refreshInterval * 1000);
         }
     }
 
@@ -149,8 +348,8 @@ class Luxtronik2 extends utils.Adapter {
         }
 
         // request the section so we have the right id to update
-        if (this.refreshTimeout) {
-            clearTimeout(this.refreshTimeout);
+        if (this.wsRefreshTimeout) {
+            clearTimeout(this.wsRefreshTimeout);
         }
         this.currentNavigationSection = navigationSection - 1;
         this.requestNextContent();
@@ -227,7 +426,7 @@ class Luxtronik2 extends utils.Adapter {
                         if (updateIndex >= 0) {
                             const cmd = itemHandler.createSetCommand(this.requestedUpdates[updateIndex].value);
                             this.log.debug(`Sending ${cmd}`);
-                            this.ws.send(cmd);
+                            this.webSocket?.send(cmd);
                             this.requestedUpdates.splice(updateIndex);
                             shouldSave = true;
                         }
@@ -237,7 +436,7 @@ class Luxtronik2 extends utils.Adapter {
 
             if (shouldSave) {
                 this.log.debug('Saving');
-                this.ws.send('SAVE;1');
+                this.webSocket?.send('SAVE;1');
                 this.isSaving = true;
             } else {
                 this.requestNextContent();
@@ -253,13 +452,13 @@ class Luxtronik2 extends utils.Adapter {
     private requestNextContent(): void {
         this.currentNavigationSection++;
         if (this.currentNavigationSection >= this.navigationSections.length) {
-            this.refreshTimeout = setTimeout(() => this.requestAllContent(), this.config.refreshInterval * 1000);
+            this.wsRefreshTimeout = setTimeout(() => this.requestAllContent(), this.config.refreshInterval * 1000);
             return;
         }
 
         const id = this.navigationSections[this.currentNavigationSection].$.id;
         this.log.debug('Getting ' + id);
-        this.ws.send('GET;' + id);
+        this.webSocket?.send('GET;' + id);
     }
 
     private getItemId(item: ItemBase): string {
@@ -292,6 +491,19 @@ class Luxtronik2 extends utils.Adapter {
 
         return new ReadOnlyHandler(id, item, adapter);
     }
+
+    public async setStateValueAsync(id: string, value: string | number | boolean | undefined): Promise<void> {
+        const currentState = await this.getStateAsync(id);
+        if (value === undefined) {
+            if (currentState) {
+                await this.delStateAsync(id);
+            }
+            return;
+        }
+        if (!currentState || currentState.val !== value || !currentState.ack) {
+            await this.setStateAsync(id, value, true);
+        }
+    }
 }
 
 abstract class ItemHandler<T extends ContentSection | ContentItem> {
@@ -307,28 +519,22 @@ abstract class ItemHandler<T extends ContentSection | ContentItem> {
 
     abstract createSetCommand(value: string | number): string;
 
-    protected unit2role(unit?: string): string {
+    protected unit2role(unit: string | undefined, readOnly: boolean): string {
+        const kind = readOnly ? 'value' : 'level';
         switch (unit) {
             case '°C':
             case 'K':
-                return 'value.temperature';
+                return `${kind}.temperature`;
             case 'bar':
-                return 'value.pressure';
+                return `${kind}.pressure`;
             case 'V':
-                return 'value.voltage';
+                return `${kind}.voltage`;
             case 'kWh':
-                return 'value.power.consumption';
+                return `${kind}.power.consumption`;
             case 'kW':
-                return 'value.power';
+                return `${kind}.power`;
             default:
-                return 'value';
-        }
-    }
-
-    protected async setStateValueAsync(value: string | number | boolean | null): Promise<void> {
-        const currentState = await this.adapter.getStateAsync(this.id);
-        if (!currentState || currentState.val !== value || !currentState.ack) {
-            await this.adapter.setStateAsync(this.id, value, true);
+                return kind;
         }
     }
 }
@@ -366,7 +572,7 @@ class ReadOnlyHandler extends ItemHandler<ReadOnlyContentItem> {
             if (match[3]) {
                 common.unit = match[3];
             }
-            common.role = this.unit2role(common.unit);
+            common.role = this.unit2role(common.unit, true);
         } else if (value === 'Ein' || value === 'Aus' || value === 'On' || value === 'Off') {
             common.type = 'boolean';
             common.role = 'sensor';
@@ -388,15 +594,15 @@ class ReadOnlyHandler extends ItemHandler<ReadOnlyContentItem> {
             const numberValue = match[1];
             if (numberValue.endsWith('-')) {
                 // something like '---'
-                await this.setStateValueAsync(null);
+                await this.adapter.setStateValueAsync(this.id, undefined);
             } else {
-                await this.setStateValueAsync(parseFloat(numberValue));
+                await this.adapter.setStateValueAsync(this.id, parseFloat(numberValue));
             }
         } else if (value === 'Ein' || value === 'Aus' || value === 'On' || value === 'Off') {
             const flag = value === 'Ein' || value === 'On';
-            await this.setStateValueAsync(flag);
+            await this.adapter.setStateValueAsync(this.id, flag);
         } else {
-            await this.setStateValueAsync(value);
+            await this.adapter.setStateValueAsync(this.id, value);
         }
     }
 
@@ -426,7 +632,7 @@ class SelectHandler extends ItemHandler<SelectContentItem> {
 
     async setStateAsync(): Promise<void> {
         const value = this.item.raw[0];
-        await this.setStateValueAsync(value);
+        await this.adapter.setStateValueAsync(this.id, value);
     }
 
     createSetCommand(value: string | number): string {
@@ -447,7 +653,7 @@ class NumberHandler extends ItemHandler<NumberContentItem> {
                 read: true,
                 write: true,
                 type: 'number',
-                role: this.unit2role(unit),
+                role: this.unit2role(unit, false),
                 unit: unit,
                 min: min / div,
                 max: max / div,
@@ -460,7 +666,7 @@ class NumberHandler extends ItemHandler<NumberContentItem> {
     async setStateAsync(): Promise<void> {
         const div = parseInt(this.item.div[0]);
         const raw = parseInt(this.item.raw[0]);
-        await this.setStateValueAsync(raw / div);
+        await this.adapter.setStateValueAsync(this.id, raw / div);
     }
 
     createSetCommand(value: string | number): string {

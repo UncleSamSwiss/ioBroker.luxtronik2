@@ -6,8 +6,10 @@ declare global {
         interface AdapterConfig {
             host: string;
             port: number;
+            luxPort: number;
             password: string;
             refreshInterval: number;
+            useLuxProxy: boolean;
         }
     }
 }

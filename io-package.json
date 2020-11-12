@@ -1,8 +1,11 @@
 {
     "common": {
         "name": "luxtronik2",
-        "version": "0.0.1",
+        "version": "0.0.2",
         "news": {
+            "0.0.2": {
+                "en": "Added support for the Luxtronik protocol"
+            },
             "0.0.1": {
                 "en": "initial release",
                 "de": "Erstveröffentlichung",
@@ -68,6 +71,7 @@
     "native": {
         "host": "127.0.0.1",
         "port": 8214,
+        "luxPort": 8888,
         "password": "",
         "refreshInterval": 5
     },
