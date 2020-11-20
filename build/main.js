@@ -371,6 +371,9 @@ class Luxtronik2 extends utils.Adapter {
             for (let i = 0; i < message.Content.item.length; i++) {
                 const section = message.Content.item[i];
                 const sectionHandler = this.createHandler(section, navigationId, sectionIds, this);
+                if (!sectionHandler) {
+                    continue;
+                }
                 if (!this.handlers[sectionHandler.id]) {
                     this.handlers[sectionHandler.id] = sectionHandler;
                     await sectionHandler.extendObjectAsync();
@@ -378,25 +381,33 @@ class Luxtronik2 extends utils.Adapter {
                 const itemIds = [];
                 for (let j = 0; j < section.item.length; j++) {
                     const item = section.item[j];
-                    const itemHandler = this.createHandler(item, sectionHandler.id, itemIds, this);
-                    if (!this.handlers[itemHandler.id]) {
-                        this.handlers[itemHandler.id] = itemHandler;
-                        this.log.silly(`Creating ${itemHandler.id}`);
-                        await itemHandler.extendObjectAsync();
-                    }
-                    if (this.requestedUpdates.length === 0) {
-                        this.log.silly(`Setting state of ${itemHandler.id}`);
-                        await itemHandler.setStateAsync();
-                    }
-                    else {
-                        const updateIndex = this.requestedUpdates.findIndex((ch) => ch.id === itemHandler.id);
-                        if (updateIndex >= 0) {
-                            const cmd = itemHandler.createSetCommand(this.requestedUpdates[updateIndex].value);
-                            this.log.debug(`Sending ${cmd}`);
-                            (_a = this.webSocket) === null || _a === void 0 ? void 0 : _a.send(cmd);
-                            this.requestedUpdates.splice(updateIndex);
-                            shouldSave = true;
+                    try {
+                        const itemHandler = this.createHandler(item, sectionHandler.id, itemIds, this);
+                        if (!itemHandler) {
+                            continue;
                         }
+                        if (!this.handlers[itemHandler.id]) {
+                            this.log.silly(`Creating ${itemHandler.id}`);
+                            await itemHandler.extendObjectAsync();
+                            this.handlers[itemHandler.id] = itemHandler;
+                        }
+                        if (this.requestedUpdates.length === 0) {
+                            this.log.silly(`Setting state of ${itemHandler.id}`);
+                            await itemHandler.setStateAsync();
+                        }
+                        else {
+                            const updateIndex = this.requestedUpdates.findIndex((ch) => ch.id === itemHandler.id);
+                            if (updateIndex >= 0) {
+                                const cmd = itemHandler.createSetCommand(this.requestedUpdates[updateIndex].value);
+                                this.log.debug(`Sending ${cmd}`);
+                                (_a = this.webSocket) === null || _a === void 0 ? void 0 : _a.send(cmd);
+                                this.requestedUpdates.splice(updateIndex);
+                                shouldSave = true;
+                            }
+                        }
+                    }
+                    catch (error) {
+                        this.log.error(`Couldn't handle '${sectionHandler.id}' -> '${item.name[0]}': ${error}`);
                     }
                 }
             }
@@ -430,6 +441,10 @@ class Luxtronik2 extends utils.Adapter {
     }
     createHandler(item, parentId, existingIds, adapter) {
         const baseId = `${parentId}.${this.getItemId(item)}`;
+        if (baseId.endsWith('.')) {
+            // item has no name
+            return undefined;
+        }
         let id = baseId;
         for (let i = 1; existingIds.includes(id); i++) {
             id = `${baseId}_${i}`;
