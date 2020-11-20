@@ -162,7 +162,11 @@ class Luxtronik2 extends utils.Adapter {
     private requestLuxtronikData(): void {
         this.luxtronik.read((err: any, data: Record<string, Record<string, string | number>>) => {
             if (err) {
-                this.log.error(`Luxtronik read error: ${err}`);
+                if (err && err.message === 'heatpump busy') {
+                    this.log.info('Heatpump busy, will retry later');
+                } else {
+                    this.log.error(`Luxtronik read error, will retry later: ${err}`);
+                }
                 this.luxRefreshTimeout = setTimeout(
                     () => this.requestLuxtronikData(),
                     this.config.refreshInterval * 1000,
