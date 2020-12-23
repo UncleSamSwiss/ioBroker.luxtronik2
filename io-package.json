@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "luxtronik2",
-        "version": "0.0.2",
+        "version": "0.1.0",
         "news": {
+            "0.1.0": {
+                "en": "Initial version on NPM containing the latest dependencies",
+                "de": "Erste Version auf NPM mit den neuesten Abhängigkeiten",
+                "ru": "Первоначальная версия на NPM, содержащая последние зависимости",
+                "pt": "Versão inicial no NPM contendo as dependências mais recentes",
+                "nl": "Eerste versie op NPM met de nieuwste afhankelijkheden",
+                "fr": "Version initiale sur NPM contenant les dernières dépendances",
+                "it": "Versione iniziale su NPM contenente le ultime dipendenze",
+                "es": "Versión inicial en NPM que contiene las dependencias más recientes",
+                "pl": "Początkowa wersja na NPM zawierająca najnowsze zależności",
+                "zh-cn": "NPM的初始版本包含最新的依赖项"
+            },
             "0.0.2": {
                 "en": "Added support for the Luxtronik protocol",
                 "de": "Unterstützung für das Luxtronik-Protokoll hinzugefügt",
