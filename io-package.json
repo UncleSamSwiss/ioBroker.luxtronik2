@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "luxtronik2",
-        "version": "0.1.0",
+        "version": "0.1.1",
         "news": {
+            "0.1.1": {
+                "en": "Updated to the latest luxtronik2 dependency",
+                "de": "Auf die neueste luxtronik2-Abhängigkeit aktualisiert",
+                "ru": "Обновлен до последней зависимости luxtronik2",
+                "pt": "Atualizado para a dependência luxtronik2 mais recente",
+                "nl": "Bijgewerkt naar de nieuwste luxtronik2-afhankelijkheid",
+                "fr": "Mise à jour vers la dernière dépendance luxtronik2",
+                "it": "Aggiornato all'ultima dipendenza luxtronik2",
+                "es": "Actualizado a la última dependencia de luxtronik2",
+                "pl": "Zaktualizowano do najnowszej zależności luxtronik2",
+                "zh-cn": "更新到最新的luxtronik2依赖项"
+            },
             "0.1.0": {
                 "en": "Initial version on NPM containing the latest dependencies",
                 "de": "Erste Version auf NPM mit den neuesten Abhängigkeiten",
