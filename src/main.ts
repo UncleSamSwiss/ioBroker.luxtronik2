@@ -122,6 +122,10 @@ class Luxtronik2 extends utils.Adapter {
             });
             for (const itemName in section) {
                 const item = section[itemName];
+                if (!item) {
+                    // ignore it
+                    continue;
+                }
                 const id = `${sectionName}.${itemName}`;
                 await this.extendObjectAsync(id, {
                     type: 'state',
@@ -212,7 +216,7 @@ class Luxtronik2 extends utils.Adapter {
         const luxSection = luxMeta[idParts[0]];
         if (luxSection && luxSection[idParts[1]]) {
             const meta = luxSection[idParts[1]];
-            if (!meta.writeName) {
+            if (!meta?.writeName) {
                 return;
             }
 
@@ -244,9 +248,15 @@ class Luxtronik2 extends utils.Adapter {
                 }
                 const section = data[sectionName];
                 for (const itemName in section) {
-                    const meta = luxMeta[sectionName][itemName];
-                    if (!meta) {
+                    const metaSection = luxMeta[sectionName];
+                    if (!metaSection.hasOwnProperty(itemName)) {
                         this.log.warn(`Unknown data item ${sectionName}.${itemName}`);
+                        continue;
+                    }
+
+                    const meta = metaSection[itemName];
+                    if (!meta) {
+                        // ignore it
                         continue;
                     }
 

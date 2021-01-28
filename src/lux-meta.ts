@@ -8,7 +8,7 @@ export interface MetaInfo {
     states?: Record<string | number, string>;
 }
 
-export const luxMeta: Record<string, Record<string, MetaInfo>> = {
+export const luxMeta: Record<string, Record<string, MetaInfo | undefined>> = {
     values: {
         temperature_supply: { role: 'value.temperature', type: 'number', unit: '°C' },
         temperature_return: { role: 'value.temperature', type: 'number', unit: '°C' },
@@ -163,6 +163,9 @@ export const luxMeta: Record<string, Record<string, MetaInfo>> = {
         LIN_VDH_out: { role: 'value', type: 'number' },
         flowRate: { role: 'value', type: 'number' },
         opStateHeatingString: { role: 'text', type: 'string' },
+        errors: undefined,
+        error_count: undefined,
+        switch_off: undefined,
     },
     parameters: {
         heating_temperature: {
@@ -206,8 +209,22 @@ export const luxMeta: Record<string, Record<string, MetaInfo>> = {
         },
         heating_operation_mode_string: { role: 'text', type: 'string' },
         warmwater_operation_mode_string: { role: 'text', type: 'string' },
-        heating_curve_end_point: { role: 'value.temperature', type: 'number', unit: '°C' },
-        heating_curve_parallel_offset: { role: 'value.temperature', type: 'number', unit: '°C' },
+        heating_curve_end_point: {
+            role: 'value.temperature',
+            type: 'number',
+            unit: '°C',
+            writeName: 'heating_curve_end_point',
+            min: 20,
+            max: 55,
+        },
+        heating_curve_parallel_offset: {
+            role: 'value.temperature',
+            type: 'number',
+            unit: '°C',
+            writeName: 'heating_curve_parallel_offset',
+            min: 15,
+            max: 45,
+        },
         deltaHeatingReduction: { role: 'value', type: 'number' },
         heatSourcedefrostAirThreshold: { role: 'value.temperature', type: 'number', unit: '°C' },
         hotWaterTemperatureHysteresis: {
@@ -236,9 +253,25 @@ export const luxMeta: Record<string, Record<string, MetaInfo>> = {
         hotWaterCircPumpDeaerate: { role: 'indicator', type: 'boolean' },
         heatingLimit: { role: 'value', type: 'number' },
         thresholdHeatingLimit: { role: 'value.temperature', type: 'number', unit: '°C' },
-        cooling_start_after_hours: { role: 'value', type: 'number' },
-        cooling_stop_after_hours: { role: 'value', type: 'number' },
+        cooling_start_after_hours: { role: 'value', type: 'number', writeName: 'cooling_start' },
+        cooling_stop_after_hours: { role: 'value', type: 'number', writeName: 'cooling_stop' },
         typeSerial: { role: 'text', type: 'string' },
         returnTemperatureTargetMin: { role: 'value.temperature', type: 'number', unit: '°C' },
+        temperature_hot_water_limit: { role: 'value.temperature', type: 'number', unit: '°C' },
+        heating_system_circ_pump_voltage_nominal: {
+            role: 'value.voltage',
+            type: 'number',
+            unit: 'V',
+            writeName: 'heating_system_circ_pump_voltage_nominal',
+        },
+        heating_system_circ_pump_voltage_minimal: {
+            role: 'value.voltage',
+            type: 'number',
+            unit: 'V',
+            writeName: 'heating_system_circ_pump_voltage_minimal',
+        },
+    },
+    additional: {
+        reading_calculated_time_ms: undefined,
     },
 };
