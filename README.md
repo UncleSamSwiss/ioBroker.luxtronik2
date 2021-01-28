@@ -19,6 +19,12 @@ Connects to Luxtronik 2 heatpump controllers over LAN and WebSocket
 
 ## Changelog
 
+### 0.1.2
+
+-   (UncleSamSwiss) Updated to the latest luxtronik2 dependency; this fixes the buffer issue seen on some heat pumps and makes the proxy hack obsolete (proxy was removed).
+-   (UncleSamSwiss) Updated all other dependencies.
+-   (UncleSamSwiss) Added new states and made some of them writable (see a21cfdd for details)
+
 ### 0.1.1
 
 -   (UncleSamSwiss) Updated to the latest luxtronik2 dependency.

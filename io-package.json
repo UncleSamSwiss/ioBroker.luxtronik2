@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "luxtronik2",
-        "version": "0.1.1",
+        "version": "0.1.2",
         "news": {
+            "0.1.2": {
+                "en": "Fixed buffer issue and added more states",
+                "de": "Pufferproblem behoben und weitere Datenpunkte hinzugefügt",
+                "ru": "Исправлена ​​проблема с буфером и добавлено больше состояний",
+                "pt": "Problema de buffer corrigido e mais estados adicionados",
+                "nl": "Bufferprobleem opgelost en meer staten toegevoegd",
+                "fr": "Correction d'un problème de tampon et ajout d'états supplémentaires",
+                "it": "Risolto il problema del buffer e aggiunti più stati",
+                "es": "Se solucionó el problema del búfer y se agregaron más estados",
+                "pl": "Naprawiono problem z buforem i dodano więcej stanów",
+                "zh-cn": "修复了缓冲区问题并添加了更多状态"
+            },
             "0.1.1": {
                 "en": "Updated to the latest luxtronik2 dependency",
                 "de": "Auf die neueste luxtronik2-Abhängigkeit aktualisiert",
@@ -77,14 +89,8 @@
             "pl": "Łączy się ze sterownikami pompy ciepła Luxtronik 2 przez LAN i WebSocket",
             "zh-cn": "通过LAN和WebSocket连接到Luxtronik 2热泵控制器"
         },
-        "authors": [
-            "UncleSamSwiss <samuel.weibel@gmail.com>"
-        ],
-        "keywords": [
-            "heatpump",
-            "websocket",
-            "luxtronik"
-        ],
+        "authors": ["UncleSamSwiss <samuel.weibel@gmail.com>"],
+        "keywords": ["heatpump", "websocket", "luxtronik"],
         "license": "Apache-2.0",
         "platform": "Javascript/Node.js",
         "main": "build/main.js",
@@ -105,12 +111,8 @@
             }
         ]
     },
-    "encryptedNative": [
-        "password"
-    ],
-    "protectedNative": [
-        "password"
-    ],
+    "encryptedNative": ["password"],
+    "protectedNative": ["password"],
     "native": {
         "host": "127.0.0.1",
         "port": 8214,
