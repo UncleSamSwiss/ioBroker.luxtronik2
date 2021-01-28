@@ -9,7 +9,7 @@ declare global {
             luxPort: number;
             password: string;
             refreshInterval: number;
-            useLuxProxy: boolean;
+            useLuxProxy?: boolean; // obsolete
         }
     }
 }

@@ -3,7 +3,6 @@
  */
 import * as utils from '@iobroker/adapter-core';
 import luxtronik from 'luxtronik2';
-import { AddressInfo, createConnection, createServer, Server } from 'net';
 import WebSocket from 'ws';
 import { parseStringPromise } from 'xml2js';
 import {
@@ -21,7 +20,6 @@ import { luxMeta } from './lux-meta';
 class Luxtronik2 extends utils.Adapter {
     private webSocket?: WebSocket;
     private luxtronik?: any;
-    private proxyServer?: Server;
 
     private closing = false;
 
@@ -57,10 +55,7 @@ class Luxtronik2 extends utils.Adapter {
         this.setState('info.connection', false, true);
 
         this.createWebSocket();
-        if (this.config.useLuxProxy) {
-            await this.createLuxTreeAsync();
-            this.createLuxtronikProxy();
-        } else if (this.config.luxPort) {
+        if (this.config.luxPort) {
             await this.createLuxTreeAsync();
             this.createLuxtronikConnection(this.config.host, this.config.luxPort);
         }
@@ -180,60 +175,6 @@ class Luxtronik2 extends utils.Adapter {
     }
 
     /**
-     * Creates a TCP proxy for the Luxtronik port.
-     * This is required in some instances because the underlying library expects
-     * all data to arrive in a single batch (which it sometimes doesn't).
-     */
-    private createLuxtronikProxy(): void {
-        const localhost = '127.0.0.1';
-        this.proxyServer = createServer((client) => {
-            this.log.debug('Received proxy connect');
-            const forward = createConnection(this.config.luxPort, this.config.host);
-            client.on('close', () => {
-                forward.end();
-                this.log.debug('Client closed proxy connection');
-            });
-            forward.on('close', () => {
-                client.end();
-                this.log.debug('Luxtronik closed proxy connection');
-            });
-            client.on('data', (data) => {
-                this.log.silly(`Received ${data.length} bytes from client`);
-                forward.write(data);
-            });
-
-            let receiveBuffer: Buffer | undefined;
-            let receiveTimeout: NodeJS.Timeout | undefined;
-            forward.on('data', (data) => {
-                this.log.silly(`Received ${data.length} bytes from Luxtronik`);
-                if (receiveTimeout) {
-                    clearTimeout(receiveTimeout);
-                }
-
-                if (receiveBuffer) {
-                    receiveBuffer = Buffer.concat([receiveBuffer, data]);
-                } else {
-                    receiveBuffer = Buffer.from(data);
-                }
-
-                receiveTimeout = setTimeout(() => {
-                    if (receiveBuffer) {
-                        this.log.silly(`Sending ${receiveBuffer.length} bytes to client`);
-                        client.write(receiveBuffer);
-                        receiveBuffer = undefined;
-                    }
-                }, 100);
-            });
-        });
-        this.proxyServer.on('listening', () => {
-            const port = (this.proxyServer?.address() as AddressInfo).port;
-            this.log.info(`Proxy listening on port ${port}`);
-            this.createLuxtronikConnection(localhost, port);
-        });
-        this.proxyServer.listen(undefined, localhost);
-    }
-
-    /**
      * Is called when adapter shuts down - callback has to be called under any circumstances!
      */
     private onUnload(callback: () => void): void {
@@ -247,8 +188,6 @@ class Luxtronik2 extends utils.Adapter {
             }
 
             this.webSocket?.close();
-
-            this.proxyServer?.close();
 
             callback();
         } catch (e) {
