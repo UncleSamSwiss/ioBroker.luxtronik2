@@ -277,12 +277,14 @@ class Luxtronik2 extends utils.Adapter {
         try {
             for (const sectionName in data) {
                 if (!lux_meta_1.luxMeta[sectionName]) {
+                    this.log.warn(`Unknown section ${sectionName}`);
                     continue;
                 }
                 const section = data[sectionName];
                 for (const itemName in section) {
                     const meta = lux_meta_1.luxMeta[sectionName][itemName];
                     if (!meta) {
+                        this.log.warn(`Unknown data item ${sectionName}.${itemName}`);
                         continue;
                     }
                     const value = section[itemName];
