@@ -583,15 +583,15 @@ class ReadOnlyHandler extends ItemHandler<ReadOnlyContentItem> {
 class SelectHandler extends ItemHandler<SelectContentItem> {
     async extendObjectAsync(): Promise<void> {
         const states: Record<string, string> = {};
-        this.item.option.forEach((option) => (states[option.$.value] = option._));
+        this.item.option.forEach((option) => (states[parseInt(option.$.value)] = option._));
         await this.adapter.extendObjectAsync(this.id, {
             type: 'state',
             common: {
                 name: this.item.name[0],
                 read: true,
                 write: true,
-                type: 'string',
-                role: 'text',
+                type: 'number',
+                role: 'level',
                 states: states,
             },
             native: this.item as any,
