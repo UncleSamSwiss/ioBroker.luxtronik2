@@ -2,7 +2,7 @@
     "host": "Hostnaam / IP-adres",
     "luxPort": "Luxtronik-poort",
     "luxtronik2 adapter settings": "Adapterinstellingen voor luxtronik2",
-    "password": "Wachtwoord",
+    "password": "wachtwoord",
     "port": "WebSocket-poort",
     "refreshInterval": "Vernieuwingsinterval",
     "seconds": "seconden"
