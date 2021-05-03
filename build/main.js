@@ -57,12 +57,20 @@ class Luxtronik2 extends utils.Adapter {
         // Initialize your adapter here
         // Reset the connection indicator during startup
         this.setState('info.connection', false, true);
+        await this.cleanupObjects();
         this.createWebSocket();
         if (this.config.luxPort) {
             await this.createLuxTreeAsync();
             this.createLuxtronikConnection(this.config.host, this.config.luxPort);
         }
         this.watchdogInterval = setInterval(() => this.handleWatchdog(), this.config.refreshInterval * 1000);
+    }
+    async cleanupObjects() {
+        const allObjects = await this.getAdapterObjectsAsync();
+        // remove all timestamp entries that were created befor version 0.2 (Fehlerspeicher and Abschaltungen)
+        await Promise.all(Object.keys(allObjects)
+            .filter((id) => !!id.match(/\.\d\d-\d\d-\d\d-\d\d:\d\d:\d\d$/))
+            .map((id) => this.delForeignObjectAsync(id)));
     }
     createWebSocket() {
         if (!this.config.port) {
@@ -360,6 +368,11 @@ class Luxtronik2 extends utils.Adapter {
                     this.handlers[sectionHandler.id] = sectionHandler;
                     await sectionHandler.extendObjectAsync();
                 }
+                if (sectionHandler instanceof TimeLogSectionHandler) {
+                    // time log sections are actually states
+                    await sectionHandler.setStateAsync();
+                    continue;
+                }
                 const itemIds = [];
                 for (let j = 0; j < section.item.length; j++) {
                     const item = section.item[j];
@@ -434,7 +447,13 @@ class Luxtronik2 extends utils.Adapter {
         }
         existingIds.push(id);
         if ('item' in item) {
-            return new SectionHandler(id, item, adapter);
+            if (item.item.every((i) => i.name.every((n) => !!n.match(/^\d\d\.\d\d\.\d\d \d\d:\d\d:\d\d$/)))) {
+                // this is a section with timestamps, use a special handler
+                return new TimeLogSectionHandler(id, item, adapter);
+            }
+            else {
+                return new SectionHandler(id, item, adapter);
+            }
         }
         if ('option' in item) {
             return new SelectHandler(id, item, adapter);
@@ -497,6 +516,25 @@ class SectionHandler extends ItemHandler {
     }
     createSetCommand(_value) {
         throw new Error('createSetCommand() not supported on section.');
+    }
+}
+class TimeLogSectionHandler extends SectionHandler {
+    async extendObjectAsync() {
+        await this.adapter.extendObjectAsync(this.id, {
+            type: 'state',
+            common: {
+                name: this.item.name[0],
+                type: 'object',
+                role: 'json',
+                read: true,
+                write: false,
+            },
+            native: this.item,
+        });
+    }
+    async setStateAsync() {
+        const value = this.item.item.reduce((old, item) => ({ ...old, [item.name[0]]: item.value[0] }), {});
+        await this.adapter.setStateValueAsync(this.id, JSON.stringify(value));
     }
 }
 class ReadOnlyHandler extends ItemHandler {
