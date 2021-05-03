@@ -273,7 +273,7 @@ class Luxtronik2 extends utils.Adapter {
                     const value = section[itemName];
                     let stateValue;
                     if (meta.type === 'number') {
-                        stateValue = value === 'no' ? undefined : value;
+                        stateValue = value === 'no' ? null : value;
                     }
                     else if (meta.type === 'boolean') {
                         switch (value) {
@@ -284,7 +284,7 @@ class Luxtronik2 extends utils.Adapter {
                                 stateValue = false;
                                 break;
                             default:
-                                stateValue = undefined;
+                                stateValue = null;
                                 break;
                         }
                     }
@@ -464,16 +464,7 @@ class Luxtronik2 extends utils.Adapter {
         return new ReadOnlyHandler(id, item, adapter);
     }
     async setStateValueAsync(id, value) {
-        const currentState = await this.getStateAsync(id);
-        if (value === undefined) {
-            if (currentState) {
-                await this.delStateAsync(id);
-            }
-            return;
-        }
-        if (!currentState || currentState.val !== value || !currentState.ack) {
-            await this.setStateAsync(id, value, true);
-        }
+        await this.setStateChangedAsync(id, value, true);
     }
 }
 class ItemHandler {
@@ -578,7 +569,7 @@ class ReadOnlyHandler extends ItemHandler {
             const numberValue = match[1];
             if (numberValue.endsWith('-')) {
                 // something like '---'
-                await this.adapter.setStateValueAsync(this.id, undefined);
+                await this.adapter.setStateValueAsync(this.id, null);
             }
             else {
                 await this.adapter.setStateValueAsync(this.id, parseFloat(numberValue));
