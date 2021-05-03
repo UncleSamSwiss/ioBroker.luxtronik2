@@ -190,9 +190,10 @@ export const luxMeta: Record<string, Record<string, MetaInfo | undefined>> = {
             writeName: 'heating_operation_mode',
             states: {
                 0: 'Automatik',
-                1: 'Party',
-                2: 'Ferien',
-                3: 'Aus',
+                1: 'Zusatzheizung',
+                2: 'Party',
+                3: 'Ferien',
+                4: 'Aus',
             },
         },
         warmwater_operation_mode: {
