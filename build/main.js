@@ -632,3 +632,4 @@ else {
     // otherwise start the instance directly
     (() => new Luxtronik2())();
 }
+//# sourceMappingURL=main.js.map
