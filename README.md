@@ -19,6 +19,20 @@ Connects to Luxtronik 2 heatpump controllers over LAN and WebSocket
 
 ## Changelog
 
+<!--
+	Placeholder for the next version (at the beginning of the line):
+	### **WORK IN PROGRESS**
+-->
+
+### **WORK IN PROGRESS**
+
+-   (UncleSamSwiss) **Breaking Change:** Fehlerspeicher and Abschaltungen are now each a single state with a JSON object as a value. (#3)
+-   (UncleSamSwiss) Fixed SelectHandler to create an object of type number.
+-   (UncleSamSwiss) Added all missing states that are now available from the latest luxtronik2 module. (#45)
+-   (UncleSamSwiss) Added watchdog for for both ports. It will restart the adapter if not receiving data after 3 retries.
+-   (UncleSamSwiss) No longer deleting state values but setting them to null if the value is unknown. (#9)
+-   (UncleSamSwiss) Fixed heating_operation_mode showing the wrong options. (#46)
+
 ### 0.1.2
 
 -   (UncleSamSwiss) Updated to the latest luxtronik2 dependency; this fixes the buffer issue seen on some heat pumps and makes the proxy hack obsolete (proxy was removed).
