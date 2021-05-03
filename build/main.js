@@ -30,6 +30,7 @@ const luxtronik2_1 = __importDefault(require("luxtronik2"));
 const ws_1 = __importDefault(require("ws"));
 const xml2js_1 = require("xml2js");
 const lux_meta_1 = require("./lux-meta");
+const WATCHDOG_RETRIES = 3;
 class Luxtronik2 extends utils.Adapter {
     constructor(options = {}) {
         super({
@@ -37,6 +38,8 @@ class Luxtronik2 extends utils.Adapter {
             ...options,
             name: 'luxtronik2',
         });
+        this.wsFailCounter = 0;
+        this.luxFailCounter = 0;
         this.closing = false;
         this.navigationSections = [];
         this.currentNavigationSection = 0;
@@ -59,6 +62,7 @@ class Luxtronik2 extends utils.Adapter {
             await this.createLuxTreeAsync();
             this.createLuxtronikConnection(this.config.host, this.config.luxPort);
         }
+        this.watchdogInterval = setInterval(() => this.handleWatchdog(), this.config.refreshInterval * 1000);
     }
     createWebSocket() {
         if (!this.config.port) {
@@ -148,6 +152,7 @@ class Luxtronik2 extends utils.Adapter {
         this.requestLuxtronikData();
     }
     requestLuxtronikData() {
+        this.luxFailCounter = 0;
         this.luxtronik.read((err, data) => {
             if (err) {
                 if (err && err.message === 'heatpump busy') {
@@ -170,6 +175,7 @@ class Luxtronik2 extends utils.Adapter {
         var _a;
         try {
             this.closing = true;
+            clearInterval(this.watchdogInterval);
             if (this.wsRefreshTimeout) {
                 clearTimeout(this.wsRefreshTimeout);
             }
@@ -181,6 +187,24 @@ class Luxtronik2 extends utils.Adapter {
         }
         catch (e) {
             callback();
+        }
+    }
+    handleWatchdog() {
+        if (this.config.port) {
+            if (this.wsFailCounter >= WATCHDOG_RETRIES) {
+                this.log.error(`Didn't receive data from WebSocket after ${this.wsFailCounter} retries, restarting adapter`);
+                this.restart();
+                return;
+            }
+            this.wsFailCounter++;
+        }
+        if (this.config.luxPort) {
+            if (this.luxFailCounter >= WATCHDOG_RETRIES) {
+                this.log.error(`Didn't receive data from Lux port after ${this.luxFailCounter} retries, restarting adapter`);
+                this.restart();
+                return;
+            }
+            this.luxFailCounter++;
         }
     }
     /**
@@ -380,6 +404,7 @@ class Luxtronik2 extends utils.Adapter {
         }
     }
     requestAllContent() {
+        this.wsFailCounter = 0;
         this.currentNavigationSection = -1;
         this.requestNextContent();
     }
