@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "luxtronik2",
-        "version": "0.1.2",
+        "version": "0.2.0",
         "news": {
+            "0.2.0": {
+                "en": "**Breaking Change:** Fehlerspeicher and Abschaltungen are now each a single state with a JSON object as a value. (#3)\nFixed SelectHandler to create an object of type number.\nAdded all missing states that are now available from the latest luxtronik2 module. (#45)\nAdded watchdog for for both ports. It will restart the adapter if not receiving data after 3 retries.\nNo longer deleting state values but setting them to null if the value is unknown. (#9)\nFixed heating_operation_mode showing the wrong options. (#46)",
+                "de": "** Breaking Change: ** Fehlerspeicher und Abschaltungen sind jetzt jeweils ein einzelner Zustand mit einem JSON-Objekt als Wert. (#3)\nSelectHandler wurde korrigiert, um ein Objekt vom Typ Nummer zu erstellen.\nEs wurden alle fehlenden Status hinzugefügt, die jetzt vom neuesten luxtronik2-Modul verfügbar sind. (# 45)\nWatchdog für beide Ports hinzugefügt. Der Adapter wird neu gestartet, wenn nach 3 Wiederholungsversuchen keine Daten empfangen werden.\nLöschen Sie keine Statuswerte mehr, sondern setzen Sie sie auf null, wenn der Wert unbekannt ist. (# 9)\nProblem, bei dem im Heizungsbetriebsmodus die falschen Optionen angezeigt wurden - gefixt (# 46)",
+                "ru": "** Критическое изменение: ** Fehlerspeicher и Abschaltungen теперь представляют собой отдельное состояние с объектом JSON в качестве значения. (# 3)\nИсправлен SelectHandler для создания объекта типа number.\nДобавлены все недостающие состояния, которые теперь доступны в последней версии модуля luxtronik2. (# 45)\nДобавлен сторожевой таймер для обоих портов. Если после 3 попыток данные не будут получены, адаптер перезапустится.\nЗначения состояния больше не удаляются, а устанавливается значение NULL, если значение неизвестно. (# 9)\nИсправлен режим heating_operation_mode, показывающий неправильные параметры. (# 46)",
+                "pt": "** Mudança decisiva: ** Fehlerspeicher e Abschaltungen agora são, cada um, um único estado com um objeto JSON como valor. (# 3)\nCorrigido o SelectHandler para criar um objeto do tipo number.\nAdicionados todos os estados ausentes que agora estão disponíveis no módulo luxtronik2 mais recente. (# 45)\nAdicionado watchdog para ambas as portas. Ele irá reiniciar o adaptador se não receber dados após 3 tentativas.\nNão mais deletando valores de estado, mas definindo-os como nulos se o valor for desconhecido. (# 9)\nHeat_operation_mode corrigido mostrando as opções erradas. (# 46)",
+                "nl": "** Brekende wijziging: ** Fehlerspeicher en Abschaltungen zijn nu elk een enkele staat met een JSON-object als waarde. (# 3)\nVaste SelectHandler om een object met typenummer te maken.\nAlle ontbrekende toestanden toegevoegd die nu beschikbaar zijn vanuit de nieuwste luxtronik2-module. (# 45)\nWaakhond toegevoegd voor beide poorten. Het zal de adapter opnieuw opstarten als er na 3 nieuwe pogingen geen gegevens zijn ontvangen.\nNiet langer statuswaarden verwijderen, maar ze op nul zetten als de waarde onbekend is. (# 9)\nProbleem verholpen dat heating_operation_mode de verkeerde opties weergeeft. (# 46)",
+                "fr": "** Changement de rupture: ** Fehlerspeicher et Abschaltungen sont désormais chacun un état unique avec un objet JSON comme valeur. (N ° 3)\nCorrection de SelectHandler pour créer un objet de type number.\nAjout de tous les états manquants qui sont maintenant disponibles à partir du dernier module luxtronik2. (N ° 45)\nAjout d'un chien de garde pour les deux ports. Il redémarrera l'adaptateur s'il ne reçoit pas de données après 3 tentatives.\nNe supprimant plus les valeurs d'état mais les définissant sur null si la valeur est inconnue. (# 9)\nCorrection du mode_opération_chauffage affichant les mauvaises options. (N ° 46)",
+                "it": "** Cambiamento decisivo: ** Fehlerspeicher e Abschaltungen sono ora ciascuno un singolo stato con un oggetto JSON come valore. (# 3)\nRisolto il problema con SelectHandler per creare un oggetto di tipo numero.\nAggiunti tutti gli stati mancanti che sono ora disponibili dall'ultimo modulo luxtronik2. (# 45)\nAggiunto watchdog per entrambe le porte. Riavvia l'adattatore se non riceve i dati dopo 3 tentativi.\nNon cancellando più i valori di stato ma impostandoli su null se il valore è sconosciuto. (# 9)\nRisolto il problema con il riscaldamento_operation_mode che mostrava le opzioni sbagliate. (# 46)",
+                "es": "** Cambio rotundo: ** Fehlerspeicher y Abschaltungen ahora son cada uno un solo estado con un objeto JSON como valor. (# 3)\nSe corrigió SelectHandler para crear un objeto de tipo número.\nSe agregaron todos los estados faltantes que ahora están disponibles en el último módulo luxtronik2. (# 45)\nSe agregó un perro guardián para ambos puertos. Reiniciará el adaptador si no recibe datos después de 3 reintentos.\nYa no elimina los valores de estado, sino que los establece en nulos si se desconoce el valor. (# 9)\nSe corrigió el modo de funcionamiento de calefacción que mostraba las opciones incorrectas. (# 46)",
+                "pl": "** Przełomowa zmiana: ** Fehlerspeicher i Abschaltungen mają teraz pojedynczy stan z obiektem JSON jako wartością. (Nr 3)\nNaprawiono SelectHandler, aby utworzyć obiekt o numerze typu.\nDodano wszystkie brakujące stany, które są teraz dostępne w najnowszym module luxtronik2. (# 45)\nDodano watchdog dla obu portów. Jeśli po 3 próbach nie otrzyma danych, nastąpi ponowne uruchomienie adaptera.\nNie usuwa już wartości stanu, ale ustawia je na null, jeśli wartość jest nieznana. (# 9)\nNaprawiono tryb Heating_operation_mode pokazujący złe opcje. (# 46)",
+                "zh-cn": "**突破性的变化：** Fehlerspeicher和Abschaltungen现在都是一个以JSON对象作为值的单一状态。 （＃3）\n修复了SelectHandler创建类型为number的对象的问题。\n添加了所有丢失的状态，这些状态现在可以从最新的luxtronik2模块获得。 （＃45）\n为两个端口添加了看门狗。如果3次重试后仍未接收到数据，它将重新启动适配器。\n不再删除状态值，而是将其设置为null（如果值未知）。 （＃9）\n修复了heating_operation_mode显示错误的选项的问题。 （＃46）"
+            },
             "0.1.2": {
                 "en": "Fixed buffer issue and added more states",
                 "de": "Pufferproblem behoben und weitere Datenpunkte hinzugefügt",
@@ -89,8 +101,14 @@
             "pl": "Łączy się ze sterownikami pompy ciepła Luxtronik 2 przez LAN i WebSocket",
             "zh-cn": "通过LAN和WebSocket连接到Luxtronik 2热泵控制器"
         },
-        "authors": ["UncleSamSwiss <samuel.weibel@gmail.com>"],
-        "keywords": ["heatpump", "websocket", "luxtronik"],
+        "authors": [
+            "UncleSamSwiss <samuel.weibel@gmail.com>"
+        ],
+        "keywords": [
+            "heatpump",
+            "websocket",
+            "luxtronik"
+        ],
         "license": "Apache-2.0",
         "platform": "Javascript/Node.js",
         "main": "build/main.js",
@@ -111,8 +129,12 @@
             }
         ]
     },
-    "encryptedNative": ["password"],
-    "protectedNative": ["password"],
+    "encryptedNative": [
+        "password"
+    ],
+    "protectedNative": [
+        "password"
+    ],
     "native": {
         "host": "127.0.0.1",
         "port": 8214,

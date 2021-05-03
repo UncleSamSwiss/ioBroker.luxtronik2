@@ -24,7 +24,7 @@ Connects to Luxtronik 2 heatpump controllers over LAN and WebSocket
 	### **WORK IN PROGRESS**
 -->
 
-### **WORK IN PROGRESS**
+### 0.2.0 (2021-05-03)
 
 -   (UncleSamSwiss) **Breaking Change:** Fehlerspeicher and Abschaltungen are now each a single state with a JSON object as a value. (#3)
 -   (UncleSamSwiss) Fixed SelectHandler to create an object of type number.
