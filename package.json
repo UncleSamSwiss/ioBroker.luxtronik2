@@ -18,7 +18,7 @@
     "url": "https://github.com/UncleSamSwiss/ioBroker.luxtronik2"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^2.4.0",
+    "@iobroker/adapter-core": "^2.5.0",
     "luxtronik2": "^2.4.0",
     "ws": "^7.4.5",
     "xml2js": "^0.4.23"
