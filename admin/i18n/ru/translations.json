@@ -5,5 +5,5 @@
     "password": "Пароль",
     "port": "Порт WebSocket",
     "refreshInterval": "Интервал обновления",
-    "seconds": "секунды"
+    "seconds": "секунд"
 }
