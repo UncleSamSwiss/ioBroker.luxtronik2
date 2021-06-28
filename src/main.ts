@@ -2,6 +2,7 @@
  * Created with @iobroker/create-adapter v1.30.1
  */
 import * as utils from '@iobroker/adapter-core';
+import * as SentryNode from '@sentry/node';
 import luxtronik from 'luxtronik2';
 import WebSocket from 'ws';
 import { parseStringPromise } from 'xml2js';
@@ -18,6 +19,8 @@ import {
 import { luxMeta } from './lux-meta';
 
 const WATCHDOG_RETRIES = 3;
+
+type Sentry = typeof SentryNode;
 
 class Luxtronik2 extends utils.Adapter {
     private webSocket?: WebSocket;
@@ -39,6 +42,8 @@ class Luxtronik2 extends utils.Adapter {
 
     private requestedUpdates: { id: string; value: string | number }[] = [];
     private isSaving = false;
+
+    private readonly reportedUnknownData = new Set<string>();
 
     public constructor(options: Partial<utils.AdapterOptions> = {}) {
         super({
@@ -92,6 +97,7 @@ class Luxtronik2 extends utils.Adapter {
 
         this.webSocket = new WebSocket(uri, 'Lux_WS');
         this.log.info('Connecting to ' + uri);
+        this.getSentry()?.addBreadcrumb({ type: 'http', category: 'ws', data: { url: uri } });
 
         this.webSocket.on('open', () => {
             try {
@@ -101,6 +107,7 @@ class Luxtronik2 extends utils.Adapter {
                 this.setState('info.connection', true, true);
             } catch (e) {
                 this.log.error(`Couldn't send login, ${e}`);
+                this.getSentry()?.captureException(e);
                 this.webSocket?.close();
             }
         });
@@ -112,6 +119,7 @@ class Luxtronik2 extends utils.Adapter {
                 return;
             }
             this.log.error(`Got WebSocket error ${err}`);
+            this.getSentry()?.captureException(err);
 
             // not available in unit tests
             if (this.restart) {
@@ -124,6 +132,7 @@ class Luxtronik2 extends utils.Adapter {
                 return;
             }
             this.log.error('Got unexpected close event');
+            this.getSentry()?.captureMessage('Got unexpected close event', SentryNode.Severity.Warning);
 
             // not available in unit tests
             if (this.restart) {
@@ -183,10 +192,11 @@ class Luxtronik2 extends utils.Adapter {
         this.luxFailCounter = 0;
         this.luxtronik.read((err: any, data: Record<string, Record<string, string | number>>) => {
             if (err) {
-                if (err && err.message === 'heatpump busy') {
+                if (err.message === 'heatpump busy') {
                     this.log.info('Heatpump busy, will retry later');
                 } else {
                     this.log.error(`Luxtronik read error, will retry later: ${err}`);
+                    this.getSentry()?.captureException(err);
                 }
                 this.luxRefreshTimeout = setTimeout(
                     () => this.requestLuxtronikData(),
@@ -196,7 +206,10 @@ class Luxtronik2 extends utils.Adapter {
             }
 
             this.setState('info.connection', true, true);
-            this.handleLuxtronikDataAsync(data).catch((e) => this.log.error(`Couldn't handle luxtronik data ${e}`));
+            this.handleLuxtronikDataAsync(data).catch((e) => {
+                this.log.error(`Couldn't handle luxtronik data ${e}`);
+                this.getSentry()?.captureException(e);
+            });
         });
     }
 
@@ -225,9 +238,9 @@ class Luxtronik2 extends utils.Adapter {
     private handleWatchdog(): void {
         if (this.config.port) {
             if (this.wsFailCounter >= WATCHDOG_RETRIES) {
-                this.log.error(
-                    `Didn't receive data from WebSocket after ${this.wsFailCounter} retries, restarting adapter`,
-                );
+                const msg = `Didn't receive data from WebSocket after ${this.wsFailCounter} retries, restarting adapter`;
+                this.log.error(msg);
+                this.getSentry()?.captureMessage(msg, SentryNode.Severity.Error);
                 this.restart();
                 return;
             }
@@ -237,9 +250,9 @@ class Luxtronik2 extends utils.Adapter {
 
         if (this.config.luxPort) {
             if (this.luxFailCounter >= WATCHDOG_RETRIES) {
-                this.log.error(
-                    `Didn't receive data from Lux port after ${this.luxFailCounter} retries, restarting adapter`,
-                );
+                const msg = `Didn't receive data from Lux port after ${this.luxFailCounter} retries, restarting adapter`;
+                this.log.error(msg);
+                this.getSentry()?.captureMessage(msg, SentryNode.Severity.Error);
                 this.restart();
                 return;
             }
@@ -276,6 +289,7 @@ class Luxtronik2 extends utils.Adapter {
             this.luxtronik?.write(meta.writeName, state.val, (err: any, _result: any) => {
                 if (err) {
                     this.log.error(`Coudln't set ${id}: ${err}`);
+                    this.getSentry()?.captureException(err, { extra: { id } });
                 }
                 this.requestLuxtronikData();
             });
@@ -291,25 +305,42 @@ class Luxtronik2 extends utils.Adapter {
     private async handleLuxtronikDataAsync(data: Record<string, Record<string, string | number>>): Promise<void> {
         try {
             for (const sectionName in data) {
-                if (!luxMeta[sectionName]) {
-                    this.log.warn(`Unknown section ${sectionName}`);
+                const metaSection = luxMeta[sectionName];
+                const section = data[sectionName];
+                if (!metaSection) {
+                    const msg = `Unknown section ${sectionName}`;
+                    this.log.warn(msg);
+                    if (!this.reportedUnknownData.has(msg)) {
+                        this.reportedUnknownData.add(msg);
+                        const sentry = this.getSentry();
+                        sentry?.withScope((scope) => {
+                            scope.setExtra('section', JSON.stringify(section, null, 2));
+                            sentry.captureMessage(msg, SentryNode.Severity.Warning);
+                        });
+                    }
                     continue;
                 }
-                const section = data[sectionName];
                 for (const itemName in section) {
-                    const metaSection = luxMeta[sectionName];
-                    if (!metaSection.hasOwnProperty(itemName)) {
-                        this.log.warn(`Unknown data item ${sectionName}.${itemName}`);
-                        continue;
-                    }
-
                     const meta = metaSection[itemName];
+                    const value = section[itemName];
                     if (!meta) {
-                        // ignore it
+                        if (metaSection.hasOwnProperty(itemName)) {
+                            // item was explicitly excluded (set to undefined in the meta-data)
+                            continue;
+                        }
+                        const msg = `Unknown data item ${sectionName}.${itemName}`;
+                        this.log.warn(msg);
+                        if (!this.reportedUnknownData.has(msg)) {
+                            this.reportedUnknownData.add(msg);
+                            const sentry = this.getSentry();
+                            sentry?.withScope((scope) => {
+                                scope.setExtra('value', value);
+                                sentry.captureMessage(msg, SentryNode.Severity.Warning);
+                            });
+                        }
                         continue;
                     }
 
-                    const value = section[itemName];
                     let stateValue: string | number | boolean | null;
                     if (meta.type === 'number') {
                         stateValue = value === 'no' ? null : value;
@@ -347,7 +378,16 @@ class Luxtronik2 extends utils.Adapter {
         const navigationSection = this.navigationSections.findIndex((i) => this.getItemId(i) === idParts[0]);
         if (navigationSection === -1) {
             this.requestedUpdates.shift();
-            this.log.warn(`Section not found for state ${id}`);
+            const msg = `Section not found for state ${id}`;
+            this.log.warn(msg);
+            if (!this.reportedUnknownData.has(msg)) {
+                this.reportedUnknownData.add(msg);
+                const sentry = this.getSentry();
+                sentry?.withScope((scope) => {
+                    scope.setExtra('id', id);
+                    sentry.captureMessage(msg, SentryNode.Severity.Warning);
+                });
+            }
             return this.handleNextUpdate();
         }
 
@@ -361,9 +401,10 @@ class Luxtronik2 extends utils.Adapter {
     }
 
     private handleWsMessage(message: string): void {
-        this.handleWsMessageAsync(message).catch((error: Error) =>
-            this.log.error(`Couldn't handle message: ${error} ${error.stack}`),
-        );
+        this.handleWsMessageAsync(message).catch((error: Error) => {
+            this.log.error(`Couldn't handle message: ${error} ${error.stack}`);
+            this.getSentry()?.captureException(error, { extra: { message } });
+        });
     }
 
     private async handleWsMessageAsync(msg: string): Promise<void> {
@@ -405,7 +446,7 @@ class Luxtronik2 extends utils.Adapter {
             let shouldSave = false;
             for (let i = 0; i < message.Content.item.length; i++) {
                 const section = message.Content.item[i];
-                const sectionHandler = this.createHandler(section, navigationId, sectionIds, this);
+                const sectionHandler = this.createHandler(section, navigationId, sectionIds);
                 if (!sectionHandler) {
                     continue;
                 }
@@ -425,7 +466,7 @@ class Luxtronik2 extends utils.Adapter {
                 for (let j = 0; j < section.item.length; j++) {
                     const item = section.item[j];
                     try {
-                        const itemHandler = this.createHandler(item, sectionHandler.id, itemIds, this);
+                        const itemHandler = this.createHandler(item, sectionHandler.id, itemIds);
                         if (!itemHandler) {
                             continue;
                         }
@@ -443,6 +484,7 @@ class Luxtronik2 extends utils.Adapter {
                             if (updateIndex >= 0) {
                                 const cmd = itemHandler.createSetCommand(this.requestedUpdates[updateIndex].value);
                                 this.log.debug(`Sending ${cmd}`);
+                                this.getSentry()?.addBreadcrumb({ type: 'http', category: 'ws', data: { url: cmd } });
                                 this.webSocket?.send(cmd);
                                 this.requestedUpdates.splice(updateIndex);
                                 shouldSave = true;
@@ -450,12 +492,14 @@ class Luxtronik2 extends utils.Adapter {
                         }
                     } catch (error) {
                         this.log.error(`Couldn't handle '${sectionHandler.id}' -> '${item.name[0]}': ${error}`);
+                        this.getSentry()?.captureException(error, { extra: { section: sectionHandler.id, item } });
                     }
                 }
             }
 
             if (shouldSave) {
                 this.log.debug('Saving');
+                this.getSentry()?.addBreadcrumb({ type: 'http', category: 'ws', data: { url: 'SAVE;1' } });
                 this.webSocket?.send('SAVE;1');
                 this.isSaving = true;
             } else {
@@ -490,11 +534,15 @@ class Luxtronik2 extends utils.Adapter {
         item: ContentSection | ContentItem,
         parentId: string,
         existingIds: string[],
-        adapter: Luxtronik2,
     ): ItemHandler<any> | undefined {
         const baseId = `${parentId}.${this.getItemId(item)}`;
         if (baseId.endsWith('.')) {
             // item has no name
+            const sentry = this.getSentry();
+            sentry?.withScope((scope) => {
+                scope.setExtra('item', JSON.stringify(item, null, 2));
+                sentry.captureMessage(`No name for handler: ${baseId}`, SentryNode.Severity.Warning);
+            });
             return undefined;
         }
         let id = baseId;
@@ -505,25 +553,34 @@ class Luxtronik2 extends utils.Adapter {
         if ('item' in item) {
             if (item.item.every((i) => i.name.every((n) => !!n.match(/^\d\d\.\d\d\.\d\d \d\d:\d\d:\d\d$/)))) {
                 // this is a section with timestamps, use a special handler
-                return new TimeLogSectionHandler(id, item, adapter);
+                return new TimeLogSectionHandler(id, item, this);
             } else {
-                return new SectionHandler(id, item, adapter);
+                return new SectionHandler(id, item, this);
             }
         }
 
         if ('option' in item) {
-            return new SelectHandler(id, item, adapter);
+            return new SelectHandler(id, item, this);
         }
 
         if ('min' in item) {
-            return new NumberHandler(id, item, adapter);
+            return new NumberHandler(id, item, this);
         }
 
-        return new ReadOnlyHandler(id, item, adapter);
+        return new ReadOnlyHandler(id, item, this);
     }
 
     public async setStateValueAsync(id: string, value: string | number | boolean | null): Promise<void> {
         await this.setStateChangedAsync(id, value, true);
+    }
+
+    public getSentry(): Sentry | undefined {
+        if (this.supportsFeature && this.supportsFeature('PLUGINS')) {
+            const sentryInstance = this.getPluginInstance('sentry');
+            if (sentryInstance) {
+                return sentryInstance.getSentryObject();
+            }
+        }
     }
 }
 

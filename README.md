@@ -17,14 +17,18 @@
 
 Connects to Luxtronik 2 heatpump controllers over LAN and WebSocket
 
+**This adapter uses Sentry libraries to automatically report exceptions and code errors to the developers.** For more details and for information how to disable the error reporting see [Sentry-Plugin Documentation](https://github.com/ioBroker/plugin-sentry#plugin-sentry)! Sentry reporting is used starting with js-controller 3.0.
+
 ## Changelog
 
 <!--
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
+
 ### **WORK IN PROGRESS**
 
+-   (UncleSamSwiss) Added sentry integration.
 -   (UncleSamSwiss) Set tier level to 2.
 
 ### 0.2.0 (2021-05-03)
