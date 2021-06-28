@@ -675,7 +675,7 @@ class SelectHandler extends ItemHandler {
         this.adapter.subscribeStates(this.id);
     }
     async setStateAsync() {
-        const value = this.item.raw[0];
+        const value = parseInt(this.item.raw[0]);
         await this.adapter.setStateValueAsync(this.id, value);
     }
     createSetCommand(value) {
