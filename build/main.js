@@ -59,6 +59,10 @@ class Luxtronik2 extends utils.Adapter {
         // Initialize your adapter here
         // Reset the connection indicator during startup
         this.setState('info.connection', false, true);
+        if (!this.config.host) {
+            this.log.error(`No host is configured, will not start anything!`);
+            return;
+        }
         await this.cleanupObjects();
         this.createWebSocket();
         if (this.config.luxPort) {

@@ -137,7 +137,7 @@
         "password"
     ],
     "native": {
-        "host": "127.0.0.1",
+        "host": "",
         "port": 8214,
         "luxPort": 8888,
         "password": "",
