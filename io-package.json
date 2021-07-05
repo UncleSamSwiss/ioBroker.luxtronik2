@@ -128,7 +128,13 @@
             {
                 "js-controller": ">=2.0.0"
             }
-        ]
+        ],
+        "plugins": {
+            "sentry": {
+                "dsn": "https://781afb355b0947a0af84bb9e704d79fe@sentry.iobroker.net/137",
+                "pathWhitelist": ["luxtronik2"]
+            }
+        }
     },
     "encryptedNative": [
         "password"
