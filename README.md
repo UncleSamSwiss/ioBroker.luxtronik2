@@ -26,7 +26,7 @@ Connects to Luxtronik 2 heatpump controllers over LAN and WebSocket
 	### **WORK IN PROGRESS**
 -->
 
-### **WORK IN PROGRESS**
+### 0.3.0 (2021-07-06)
 
 -   (UncleSamSwiss) Added sentry integration.
 -   (UncleSamSwiss) Set tier level to 2.

@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "luxtronik2",
-        "version": "0.2.0",
+        "version": "0.3.0",
         "news": {
+            "0.3.0": {
+                "en": "Added sentry integration.\nSet tier level to 2.",
+                "de": "Sentry-Integration hinzugefügt.\nSetze Rangstufe auf 2.",
+                "ru": "Добавлена интеграция с караульной.\nУстановите уровень уровня на 2.",
+                "pt": "Adicionada integração de sentinela.\nDefina o nível de camada como 2.",
+                "nl": "Sentry-integratie toegevoegd.\nStel het niveau in op 2.",
+                "fr": "Ajout de l'intégration de sentinelle.\nDéfinissez le niveau de niveau sur 2.",
+                "it": "Aggiunta l'integrazione della sentinella.\nImposta il livello di livello su 2.",
+                "es": "Integración de centinela agregada.\nEstablezca el nivel de nivel en 2.",
+                "pl": "Dodano integrację wartowników.\nUstaw poziom poziomu na 2.",
+                "zh-cn": "添加哨兵集成。\n将层级设置为 2。"
+            },
             "0.2.0": {
                 "en": "**Breaking Change:** Fehlerspeicher and Abschaltungen are now each a single state with a JSON object as a value. (#3)\nFixed SelectHandler to create an object of type number.\nAdded all missing states that are now available from the latest luxtronik2 module. (#45)\nAdded watchdog for for both ports. It will restart the adapter if not receiving data after 3 retries.\nNo longer deleting state values but setting them to null if the value is unknown. (#9)\nFixed heating_operation_mode showing the wrong options. (#46)",
                 "de": "** Breaking Change: ** Fehlerspeicher und Abschaltungen sind jetzt jeweils ein einzelner Zustand mit einem JSON-Objekt als Wert. (#3)\nSelectHandler wurde korrigiert, um ein Objekt vom Typ Nummer zu erstellen.\nEs wurden alle fehlenden Status hinzugefügt, die jetzt vom neuesten luxtronik2-Modul verfügbar sind. (# 45)\nWatchdog für beide Ports hinzugefügt. Der Adapter wird neu gestartet, wenn nach 3 Wiederholungsversuchen keine Daten empfangen werden.\nLöschen Sie keine Statuswerte mehr, sondern setzen Sie sie auf null, wenn der Wert unbekannt ist. (# 9)\nProblem, bei dem im Heizungsbetriebsmodus die falschen Optionen angezeigt wurden - gefixt (# 46)",
@@ -132,7 +144,9 @@
         "plugins": {
             "sentry": {
                 "dsn": "https://781afb355b0947a0af84bb9e704d79fe@sentry.iobroker.net/137",
-                "pathWhitelist": ["luxtronik2"]
+                "pathWhitelist": [
+                    "luxtronik2"
+                ]
             }
         }
     },
