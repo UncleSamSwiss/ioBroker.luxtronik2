@@ -7,12 +7,11 @@
         {
             "type": "node",
             "request": "launch",
-            "name": "Launch TypeScript Adapter",
+            "name": "Launch ioBroker Adapter",
             "skipFiles": ["<node_internals>/**"],
-            "program": "${workspaceFolder}/build/main.js",
             "args": ["--debug", "0"],
-            "preLaunchTask": "tsc: build - tsconfig.build.json",
-            "outFiles": ["${workspaceFolder}/build/**/*.js"]
+            "program": "node_modules/iobroker.luxtronik2/build/main.js",
+            "cwd": "${workspaceFolder}/.dev-server/default"
         }
     ]
 }
