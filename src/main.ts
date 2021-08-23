@@ -233,6 +233,7 @@ class Luxtronik2 extends utils.Adapter {
             }
 
             this.webSocket?.close();
+            this.luxtronik?.client?.destroy();
 
             callback();
         } catch (e) {

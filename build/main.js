@@ -199,7 +199,7 @@ class Luxtronik2 extends utils.Adapter {
      * Is called when adapter shuts down - callback has to be called under any circumstances!
      */
     onUnload(callback) {
-        var _a;
+        var _a, _b, _c;
         try {
             this.closing = true;
             clearInterval(this.watchdogInterval);
@@ -210,6 +210,7 @@ class Luxtronik2 extends utils.Adapter {
                 clearTimeout(this.luxRefreshTimeout);
             }
             (_a = this.webSocket) === null || _a === void 0 ? void 0 : _a.close();
+            (_c = (_b = this.luxtronik) === null || _b === void 0 ? void 0 : _b.client) === null || _c === void 0 ? void 0 : _c.destroy();
             callback();
         }
         catch (e) {
