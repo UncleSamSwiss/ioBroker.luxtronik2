@@ -113,14 +113,8 @@
             "pl": "Łączy się ze sterownikami pompy ciepła Luxtronik 2 przez LAN i WebSocket",
             "zh-cn": "通过LAN和WebSocket连接到Luxtronik 2热泵控制器"
         },
-        "authors": [
-            "UncleSamSwiss <samuel.weibel@gmail.com>"
-        ],
-        "keywords": [
-            "heatpump",
-            "websocket",
-            "luxtronik"
-        ],
+        "authors": ["UncleSamSwiss <samuel.weibel@gmail.com>"],
+        "keywords": ["heatpump", "websocket", "luxtronik"],
         "license": "Apache-2.0",
         "platform": "Javascript/Node.js",
         "main": "build/main.js",
@@ -141,21 +135,20 @@
                 "js-controller": ">=2.0.0"
             }
         ],
+        "globalDependencies": [
+            {
+                "admin": ">=4.0.9"
+            }
+        ],
         "plugins": {
             "sentry": {
                 "dsn": "https://781afb355b0947a0af84bb9e704d79fe@sentry.iobroker.net/137",
-                "pathWhitelist": [
-                    "luxtronik2"
-                ]
+                "pathWhitelist": ["luxtronik2"]
             }
         }
     },
-    "encryptedNative": [
-        "password"
-    ],
-    "protectedNative": [
-        "password"
-    ],
+    "encryptedNative": ["password"],
+    "protectedNative": ["password"],
     "native": {
         "host": "",
         "port": 8214,
