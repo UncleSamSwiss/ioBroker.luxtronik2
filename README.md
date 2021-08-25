@@ -26,6 +26,11 @@ Connects to Luxtronik 2 heatpump controllers over LAN and WebSocket
 	### **WORK IN PROGRESS**
 -->
 
+### **WORK IN PROGRESS**
+
+-   (UncleSamSwiss) Properly closing Luxtronik port when exiting the adapter.
+-   (UncleSamSwiss) Minor non-functional changes to appeal to dev guidelines.
+
 ### 0.3.0 (2021-07-06)
 
 -   (UncleSamSwiss) Added sentry integration.
