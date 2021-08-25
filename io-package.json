@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "luxtronik2",
-        "version": "0.3.0",
+        "version": "0.3.1",
         "news": {
+            "0.3.1": {
+                "en": "Properly closing Luxtronik port when exiting the adapter.\nMinor non-functional changes to appeal to dev guidelines.",
+                "de": "Richtiges Schließen des Luxtronik-Ports beim Verlassen des Adapters.\nGeringfügige nicht-funktionale Änderungen, um den Entwicklerrichtlinien zu entsprechen.",
+                "ru": "Правильное закрытие порта Luxtronik при выходе из адаптера.\nНезначительные нефункциональные изменения в соответствии с рекомендациями разработчиков.",
+                "pt": "Fechando corretamente a porta Luxtronik ao sair do adaptador.\nPequenas alterações não funcionais para apelar às diretrizes de desenvolvimento.",
+                "nl": "De Luxtronik-poort goed sluiten bij het verlaten van de adapter.\nKleine niet-functionele wijzigingen om aan de richtlijnen voor ontwikkelaars te voldoen.",
+                "fr": "Fermeture correcte du port Luxtronik lors de la sortie de l'adaptateur.\nModifications mineures non fonctionnelles pour faire appel aux directives de développement.",
+                "it": "Chiudere correttamente la porta Luxtronik quando si esce dall'adattatore.\nModifiche minori non funzionali per fare appello alle linee guida per gli sviluppatori.",
+                "es": "Cerrar correctamente el puerto Luxtronik al salir del adaptador.\nCambios menores no funcionales para apelar a las pautas de desarrollo.",
+                "pl": "Prawidłowe zamknięcie portu Luxtronik podczas wychodzenia z adaptera.\nDrobne niefunkcjonalne zmiany, aby odwołać się do wytycznych deweloperów.",
+                "zh-cn": "退出适配器时正确关闭 Luxtronik 端口。\n微小的非功能性更改以吸引开发指南。"
+            },
             "0.3.0": {
                 "en": "Added sentry integration.\nSet tier level to 2.",
                 "de": "Sentry-Integration hinzugefügt.\nSetze Rangstufe auf 2.",
@@ -113,8 +125,14 @@
             "pl": "Łączy się ze sterownikami pompy ciepła Luxtronik 2 przez LAN i WebSocket",
             "zh-cn": "通过LAN和WebSocket连接到Luxtronik 2热泵控制器"
         },
-        "authors": ["UncleSamSwiss <samuel.weibel@gmail.com>"],
-        "keywords": ["heatpump", "websocket", "luxtronik"],
+        "authors": [
+            "UncleSamSwiss <samuel.weibel@gmail.com>"
+        ],
+        "keywords": [
+            "heatpump",
+            "websocket",
+            "luxtronik"
+        ],
         "license": "Apache-2.0",
         "platform": "Javascript/Node.js",
         "main": "build/main.js",
@@ -143,12 +161,18 @@
         "plugins": {
             "sentry": {
                 "dsn": "https://781afb355b0947a0af84bb9e704d79fe@sentry.iobroker.net/137",
-                "pathWhitelist": ["luxtronik2"]
+                "pathWhitelist": [
+                    "luxtronik2"
+                ]
             }
         }
     },
-    "encryptedNative": ["password"],
-    "protectedNative": ["password"],
+    "encryptedNative": [
+        "password"
+    ],
+    "protectedNative": [
+        "password"
+    ],
     "native": {
         "host": "",
         "port": 8214,
