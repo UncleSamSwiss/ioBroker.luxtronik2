@@ -26,7 +26,7 @@ Connects to Luxtronik 2 heatpump controllers over LAN and WebSocket
 	### **WORK IN PROGRESS**
 -->
 
-### **WORK IN PROGRESS**
+### 0.3.2 (2021-09-15)
 
 -   (UncleSamSwiss) Improved Sentry reporting.
 

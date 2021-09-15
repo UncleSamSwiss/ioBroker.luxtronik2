@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "luxtronik2",
-        "version": "0.3.1",
+        "version": "0.3.2",
         "news": {
+            "0.3.2": {
+                "en": "Improved Sentry reporting.",
+                "de": "Verbesserte Sentry-Berichterstellung.",
+                "ru": "Улучшенная система отчетов Sentry.",
+                "pt": "Relatório de Sentinelas aprimorado.",
+                "nl": "Verbeterde Sentry-rapportage.",
+                "fr": "Rapports Sentry améliorés.",
+                "it": "Segnalazione sentinella migliorata.",
+                "es": "Informes de centinela mejorados.",
+                "pl": "Ulepszone raportowanie Strażników.",
+                "zh-cn": "改进了哨兵报告。"
+            },
             "0.3.1": {
                 "en": "Properly closing Luxtronik port when exiting the adapter.\nMinor non-functional changes to appeal to dev guidelines.",
                 "de": "Richtiges Schließen des Luxtronik-Ports beim Verlassen des Adapters.\nGeringfügige nicht-funktionale Änderungen, um den Entwicklerrichtlinien zu entsprechen.",
