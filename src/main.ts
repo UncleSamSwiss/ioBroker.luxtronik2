@@ -84,7 +84,7 @@ class Luxtronik2 extends utils.Adapter {
     private async cleanupObjects(): Promise<void> {
         const allObjects = await this.getAdapterObjectsAsync();
 
-        // remove all timestamp entries that were created befor version 0.2 (Fehlerspeicher and Abschaltungen)
+        // remove all timestamp entries that were created before version 0.2 (Fehlerspeicher and Abschaltungen)
         await Promise.all(
             Object.keys(allObjects)
                 .filter((id) => !!id.match(/\.\d\d-\d\d-\d\d-\d\d:\d\d:\d\d$/))
@@ -544,11 +544,15 @@ class Luxtronik2 extends utils.Adapter {
         const baseId = `${parentId}.${this.getItemId(item)}`;
         if (baseId.endsWith('.')) {
             // item has no name
-            const sentry = this.getSentry();
-            sentry?.withScope((scope) => {
-                scope.setExtra('item', JSON.stringify(item, null, 2));
-                sentry.captureMessage(`No name for handler: ${baseId}`, SentryNode.Severity.Warning);
-            });
+            const msg = `No name for handler: ${baseId}`;
+            if (!this.reportedUnknownData.has(msg)) {
+                this.reportedUnknownData.add(msg);
+                const sentry = this.getSentry();
+                sentry?.withScope((scope) => {
+                    scope.setExtra('item', JSON.stringify(item, null, 2));
+                    sentry.captureMessage(msg, SentryNode.Severity.Warning);
+                });
+            }
             return undefined;
         }
         let id = baseId;
