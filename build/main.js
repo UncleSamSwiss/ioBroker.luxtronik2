@@ -73,7 +73,7 @@ class Luxtronik2 extends utils.Adapter {
     }
     async cleanupObjects() {
         const allObjects = await this.getAdapterObjectsAsync();
-        // remove all timestamp entries that were created befor version 0.2 (Fehlerspeicher and Abschaltungen)
+        // remove all timestamp entries that were created before version 0.2 (Fehlerspeicher and Abschaltungen)
         await Promise.all(Object.keys(allObjects)
             .filter((id) => !!id.match(/\.\d\d-\d\d-\d\d-\d\d:\d\d:\d\d$/))
             .map((id) => this.delForeignObjectAsync(id)));
@@ -382,7 +382,7 @@ class Luxtronik2 extends utils.Adapter {
     }
     async handleWsMessageAsync(msg) {
         var _a, _b, _c, _d, _e;
-        const message = await xml2js_1.parseStringPromise(msg);
+        const message = await (0, xml2js_1.parseStringPromise)(msg);
         this.log.debug(JSON.stringify(message));
         if ('Navigation' in message) {
             if (this.navigationSections.length > 0) {
@@ -500,11 +500,15 @@ class Luxtronik2 extends utils.Adapter {
         const baseId = `${parentId}.${this.getItemId(item)}`;
         if (baseId.endsWith('.')) {
             // item has no name
-            const sentry = this.getSentry();
-            sentry === null || sentry === void 0 ? void 0 : sentry.withScope((scope) => {
-                scope.setExtra('item', JSON.stringify(item, null, 2));
-                sentry.captureMessage(`No name for handler: ${baseId}`, SentryNode.Severity.Warning);
-            });
+            const msg = `No name for handler: ${baseId}`;
+            if (!this.reportedUnknownData.has(msg)) {
+                this.reportedUnknownData.add(msg);
+                const sentry = this.getSentry();
+                sentry === null || sentry === void 0 ? void 0 : sentry.withScope((scope) => {
+                    scope.setExtra('item', JSON.stringify(item, null, 2));
+                    sentry.captureMessage(msg, SentryNode.Severity.Warning);
+                });
+            }
             return undefined;
         }
         let id = baseId;
