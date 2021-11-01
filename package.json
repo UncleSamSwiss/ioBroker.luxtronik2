@@ -24,7 +24,7 @@
     "@iobroker/adapter-core": "^2.5.1",
     "@sentry/node": "^6.12.0",
     "luxtronik2": "^2.4.0",
-    "ws": "^8.2.2",
+    "ws": "^8.2.3",
     "xml2js": "^0.4.23"
   },
   "devDependencies": {
