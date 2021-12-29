@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "luxtronik2",
-        "version": "0.3.2",
+        "version": "0.4.0",
         "news": {
+            "0.4.0": {
+                "en": "Updated to the latest luxtronik2 dependency (should fix most known issues)\nUpdated all (other) dependencies",
+                "de": "Auf die neueste luxtronik2-Abhängigkeit aktualisiert (sollte die meisten bekannten Probleme beheben)\nAlle (anderen) Abhängigkeiten aktualisiert",
+                "ru": "Обновлено до последней зависимости luxtronik2 (должно исправить большинство известных проблем)\nОбновлены все (другие) зависимости",
+                "pt": "Atualizado para a dependência luxtronik2 mais recente (deve corrigir a maioria dos problemas conhecidos)\nTodas as (outras) dependências atualizadas",
+                "nl": "Bijgewerkt naar de nieuwste luxtronik2-afhankelijkheid (zou de meeste bekende problemen moeten oplossen)\nAlle (andere) afhankelijkheden bijgewerkt",
+                "fr": "Mise à jour vers la dernière dépendance luxtronik2 (devrait résoudre les problèmes les plus connus)\nMise à jour de toutes les (autres) dépendances",
+                "it": "Aggiornato all'ultima dipendenza luxtronik2 (dovrebbe risolvere i problemi più noti)\nAggiornate tutte le (altre) dipendenze",
+                "es": "Actualizado a la última dependencia de luxtronik2 (debería solucionar la mayoría de los problemas conocidos)\nSe actualizaron todas las (otras) dependencias",
+                "pl": "Zaktualizowano do najnowszej zależności luxtronik2 (powinna rozwiązać większość znanych problemów)\nZaktualizowano wszystkie (inne) zależności",
+                "zh-cn": "更新到最新的 luxtronik2 依赖项（应修复大多数已知问题）\n更新了所有（其他）依赖项"
+            },
             "0.3.2": {
                 "en": "Improved Sentry reporting.",
                 "de": "Verbesserte Sentry-Berichterstellung.",

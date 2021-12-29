@@ -26,7 +26,7 @@ Connects to Luxtronik 2 heatpump controllers over LAN and WebSocket
 	### **WORK IN PROGRESS**
 -->
 
-### **WORK IN PROGRESS**
+### 0.4.0 (2021-12-29)
 
 -   (UncleSamSwiss) Updated to the latest luxtronik2 dependency (should fix most known issues)
 -   (UncleSamSwiss) Updated all (other) dependencies
