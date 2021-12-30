@@ -220,6 +220,17 @@ exports.luxMeta = {
             max: 45,
         },
         deltaHeatingReduction: { role: 'value', type: 'number' },
+        mk1_curve_end_point: {
+            role: 'value.temperature',
+            type: 'number',
+            unit: '°C',
+        },
+        mk1_curve_parallel_offset: {
+            role: 'value.temperature',
+            type: 'number',
+            unit: '°C',
+        },
+        deltaMk1Reduction: { role: 'value', type: 'number' },
         heatSourcedefrostAirThreshold: { role: 'value.temperature', type: 'number', unit: '°C' },
         hotWaterTemperatureHysteresis: {
             role: 'value.temperature',
