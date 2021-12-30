@@ -497,6 +497,9 @@ class Luxtronik2 extends utils.Adapter {
         return item.name[0].replace(/[\][*,;'"`<>\\?/._ \-]+/g, '-').replace(/(^-+|-+$)/g, '');
     }
     createHandler(item, parentId, existingIds) {
+        if (item.name[0] === '---') {
+            return undefined;
+        }
         const baseId = `${parentId}.${this.getItemId(item)}`;
         if (baseId.endsWith('.')) {
             // item has no name

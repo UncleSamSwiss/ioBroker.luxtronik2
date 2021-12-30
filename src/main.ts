@@ -541,6 +541,9 @@ class Luxtronik2 extends utils.Adapter {
         parentId: string,
         existingIds: string[],
     ): ItemHandler<any> | undefined {
+        if (item.name[0] === '---') {
+            return undefined;
+        }
         const baseId = `${parentId}.${this.getItemId(item)}`;
         if (baseId.endsWith('.')) {
             // item has no name
