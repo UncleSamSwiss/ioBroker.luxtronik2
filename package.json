@@ -1,6 +1,6 @@
 {
   "name": "iobroker.luxtronik2",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Connects to Luxtronik 2 heatpump controllers over LAN and WebSocket",
   "author": {
     "name": "UncleSamSwiss",

@@ -26,7 +26,7 @@ Connects to Luxtronik 2 heatpump controllers over LAN and WebSocket
 	### **WORK IN PROGRESS**
 -->
 
-### **WORK IN PROGRESS**
+### 0.4.1 (2021-12-30)
 
 -   (UncleSamSwiss) Added missing MK1 parameters
 

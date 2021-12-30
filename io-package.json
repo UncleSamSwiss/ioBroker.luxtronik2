@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "luxtronik2",
-        "version": "0.4.0",
+        "version": "0.4.1",
         "news": {
+            "0.4.1": {
+                "en": "Added missing MK1 parameters",
+                "de": "Fehlende MK1-Parameter hinzugefügt",
+                "ru": "Добавлены недостающие параметры MK1",
+                "pt": "Adicionados parâmetros MK1 ausentes",
+                "nl": "Ontbrekende MK1-parameters toegevoegd",
+                "fr": "Ajout des paramètres MK1 manquants",
+                "it": "Aggiunti parametri MK1 mancanti",
+                "es": "Se agregaron los parámetros MK1 faltantes",
+                "pl": "Dodano brakujące parametry MK1",
+                "zh-cn": "添加了缺失的 MK1 参数"
+            },
             "0.4.0": {
                 "en": "Updated to the latest luxtronik2 dependency (should fix most known issues)\nUpdated all (other) dependencies",
                 "de": "Auf die neueste luxtronik2-Abhängigkeit aktualisiert (sollte die meisten bekannten Probleme beheben)\nAlle (anderen) Abhängigkeiten aktualisiert",
