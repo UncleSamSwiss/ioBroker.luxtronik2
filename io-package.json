@@ -1,8 +1,20 @@
 {
     "common": {
         "name": "luxtronik2",
-        "version": "0.4.1",
+        "version": "0.4.2",
         "news": {
+            "0.4.2": {
+                "en": "Filtering out empty time log entries\nUpdated to the latest luxtronik2 dependency",
+                "de": "Herausfiltern leerer Zeitprotokolleinträge\nAktualisiert auf die neueste luxtronik2-Abhängigkeit",
+                "ru": "Фильтрация пустых записей журнала учета рабочего времени\nОбновлен до последней зависимости luxtronik2",
+                "pt": "Filtrando entradas de registro de tempo vazias\nAtualizado para a última dependência do luxtronik2",
+                "nl": "Lege tijdlogboekvermeldingen eruit filteren\nBijgewerkt naar de nieuwste luxtronik2-afhankelijkheid",
+                "fr": "Filtrage des entrées de journal de temps vides\nMise à jour vers la dernière dépendance luxtronik2",
+                "it": "Filtraggio delle voci di registro orari vuote\nAggiornato all'ultima dipendenza da luxtronik2",
+                "es": "Filtrado de entradas de registro de tiempo vacías\nActualizado a la última dependencia de luxtronik2",
+                "pl": "Filtrowanie pustych wpisów dziennika czasu\nZaktualizowano do najnowszej zależności luxtronik2",
+                "zh-cn": "过滤掉空的时间日志条目\n更新到最新的 luxtronik2 依赖项"
+            },
             "0.4.1": {
                 "en": "Added missing MK1 parameters",
                 "de": "Fehlende MK1-Parameter hinzugefügt",
