@@ -21,7 +21,7 @@
     "node": ">=12.0"
   },
   "dependencies": {
-    "@iobroker/adapter-core": "^2.5.1",
+    "@iobroker/adapter-core": "^2.6.8",
     "@sentry/node": "^6.16.1",
     "luxtronik2": "^2.5.1",
     "ws": "^8.4.2",
