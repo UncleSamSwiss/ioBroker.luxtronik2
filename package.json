@@ -25,7 +25,7 @@
     "@sentry/node": "^6.16.1",
     "luxtronik2": "^2.5.1",
     "ws": "^8.4.2",
-    "xml2js": "^0.4.23"
+    "xml2js": "^0.6.2"
   },
   "devDependencies": {
     "@alcalzone/release-script": "^2.2.1",
