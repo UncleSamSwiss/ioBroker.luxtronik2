@@ -252,7 +252,12 @@ export const luxMeta: Record<string, Record<string, MetaInfo | undefined>> = {
             writeName: 'return_temperature_hysteresis',
         },
         heatSourcedefrostAirEnd: { role: 'value', type: 'number' },
-        temperature_hot_water_target: { role: 'value.temperature', type: 'number', unit: '°C' },
+        temperature_hot_water_target: {
+            role: 'value.temperature',
+            type: 'number',
+            unit: '°C',
+            writeName: 'temperature_hot_water_target'
+        },
         cooling_operation_mode: { role: 'value', type: 'number', writeName: 'cooling_operation_mode' },
         cooling_release_temperature: {
             role: 'value.temperature',
