@@ -180,7 +180,7 @@ export const luxMeta: Record<string, Record<string, MetaInfo | undefined>> = {
             role: 'value.temperature',
             type: 'number',
             unit: '°C',
-            writeName: 'warmwater_target_temperature',
+            writeName: 'temperature_hot_water_target',
             min: 30,
             max: 65,
         },
