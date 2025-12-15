@@ -183,7 +183,6 @@
         ],
         "license": "Apache-2.0",
         "platform": "Javascript/Node.js",
-        "main": "build/main.js",
         "icon": "luxtronik2.png",
         "enabled": true,
         "extIcon": "https://raw.githubusercontent.com/UncleSamSwiss/ioBroker.luxtronik2/master/admin/luxtronik2.png",
