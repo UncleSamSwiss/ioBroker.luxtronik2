@@ -9,6 +9,7 @@
   "homepage": "https://github.com/UncleSamSwiss/ioBroker.luxtronik2",
   "license": "Apache-2.0",
   "keywords": [
+    "ioBroker",
     "heatpump",
     "websocket",
     "luxtronik"
