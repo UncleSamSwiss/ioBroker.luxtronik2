@@ -26,6 +26,9 @@ Connects to Luxtronik 2 heatpump controllers over LAN and WebSocket
 	### **WORK IN PROGRESS**
 -->
 
+### **WORK IN PROGRESS**
+- (copilot) Adapter requires node.js >= 22 now
+
 ### 0.4.2 (2022-01-25)
 
 -   (UncleSamSwiss) Filtering out empty time log entries
