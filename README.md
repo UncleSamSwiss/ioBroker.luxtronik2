@@ -86,6 +86,8 @@ Connects to Luxtronik 2 heatpump controllers over LAN and WebSocket
 
 -   (UncleSamSwiss) initial release
 
+[Older changelogs can be found there](CHANGELOG_OLD.md)
+
 ## Third-party Licenses
 
 Large parts of this adapter are based on https://github.com/bouni/node-red-contrib-luxtronik2-ws
