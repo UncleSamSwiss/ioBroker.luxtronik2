@@ -1,255 +1,255 @@
 {
-    "common": {
-        "name": "luxtronik2",
-        "version": "0.4.2",
-        "news": {
-            "0.4.2": {
-                "en": "Filtering out empty time log entries\nUpdated to the latest luxtronik2 dependency",
-                "de": "Herausfiltern leerer Zeitprotokolleinträge\nAktualisiert auf die neueste luxtronik2-Abhängigkeit",
-                "ru": "Фильтрация пустых записей журнала учета рабочего времени\nОбновлен до последней зависимости luxtronik2",
-                "pt": "Filtrando entradas de registro de tempo vazias\nAtualizado para a última dependência do luxtronik2",
-                "nl": "Lege tijdlogboekvermeldingen eruit filteren\nBijgewerkt naar de nieuwste luxtronik2-afhankelijkheid",
-                "fr": "Filtrage des entrées de journal de temps vides\nMise à jour vers la dernière dépendance luxtronik2",
-                "it": "Filtraggio delle voci di registro orari vuote\nAggiornato all'ultima dipendenza da luxtronik2",
-                "es": "Filtrado de entradas de registro de tiempo vacías\nActualizado a la última dependencia de luxtronik2",
-                "pl": "Filtrowanie pustych wpisów dziennika czasu\nZaktualizowano do najnowszej zależności luxtronik2",
-                "zh-cn": "过滤掉空的时间日志条目\n更新到最新的 luxtronik2 依赖项"
-            },
-            "0.4.1": {
-                "en": "Added missing MK1 parameters",
-                "de": "Fehlende MK1-Parameter hinzugefügt",
-                "ru": "Добавлены недостающие параметры MK1",
-                "pt": "Adicionados parâmetros MK1 ausentes",
-                "nl": "Ontbrekende MK1-parameters toegevoegd",
-                "fr": "Ajout des paramètres MK1 manquants",
-                "it": "Aggiunti parametri MK1 mancanti",
-                "es": "Se agregaron los parámetros MK1 faltantes",
-                "pl": "Dodano brakujące parametry MK1",
-                "zh-cn": "添加了缺失的 MK1 参数"
-            },
-            "0.4.0": {
-                "en": "Updated to the latest luxtronik2 dependency (should fix most known issues)\nUpdated all (other) dependencies",
-                "de": "Auf die neueste luxtronik2-Abhängigkeit aktualisiert (sollte die meisten bekannten Probleme beheben)\nAlle (anderen) Abhängigkeiten aktualisiert",
-                "ru": "Обновлено до последней зависимости luxtronik2 (должно исправить большинство известных проблем)\nОбновлены все (другие) зависимости",
-                "pt": "Atualizado para a dependência luxtronik2 mais recente (deve corrigir a maioria dos problemas conhecidos)\nTodas as (outras) dependências atualizadas",
-                "nl": "Bijgewerkt naar de nieuwste luxtronik2-afhankelijkheid (zou de meeste bekende problemen moeten oplossen)\nAlle (andere) afhankelijkheden bijgewerkt",
-                "fr": "Mise à jour vers la dernière dépendance luxtronik2 (devrait résoudre les problèmes les plus connus)\nMise à jour de toutes les (autres) dépendances",
-                "it": "Aggiornato all'ultima dipendenza luxtronik2 (dovrebbe risolvere i problemi più noti)\nAggiornate tutte le (altre) dipendenze",
-                "es": "Actualizado a la última dependencia de luxtronik2 (debería solucionar la mayoría de los problemas conocidos)\nSe actualizaron todas las (otras) dependencias",
-                "pl": "Zaktualizowano do najnowszej zależności luxtronik2 (powinna rozwiązać większość znanych problemów)\nZaktualizowano wszystkie (inne) zależności",
-                "zh-cn": "更新到最新的 luxtronik2 依赖项（应修复大多数已知问题）\n更新了所有（其他）依赖项"
-            },
-            "0.3.2": {
-                "en": "Improved Sentry reporting.",
-                "de": "Verbesserte Sentry-Berichterstellung.",
-                "ru": "Улучшенная система отчетов Sentry.",
-                "pt": "Relatório de Sentinelas aprimorado.",
-                "nl": "Verbeterde Sentry-rapportage.",
-                "fr": "Rapports Sentry améliorés.",
-                "it": "Segnalazione sentinella migliorata.",
-                "es": "Informes de centinela mejorados.",
-                "pl": "Ulepszone raportowanie Strażników.",
-                "zh-cn": "改进了哨兵报告。"
-            },
-            "0.3.1": {
-                "en": "Properly closing Luxtronik port when exiting the adapter.\nMinor non-functional changes to appeal to dev guidelines.",
-                "de": "Richtiges Schließen des Luxtronik-Ports beim Verlassen des Adapters.\nGeringfügige nicht-funktionale Änderungen, um den Entwicklerrichtlinien zu entsprechen.",
-                "ru": "Правильное закрытие порта Luxtronik при выходе из адаптера.\nНезначительные нефункциональные изменения в соответствии с рекомендациями разработчиков.",
-                "pt": "Fechando corretamente a porta Luxtronik ao sair do adaptador.\nPequenas alterações não funcionais para apelar às diretrizes de desenvolvimento.",
-                "nl": "De Luxtronik-poort goed sluiten bij het verlaten van de adapter.\nKleine niet-functionele wijzigingen om aan de richtlijnen voor ontwikkelaars te voldoen.",
-                "fr": "Fermeture correcte du port Luxtronik lors de la sortie de l'adaptateur.\nModifications mineures non fonctionnelles pour faire appel aux directives de développement.",
-                "it": "Chiudere correttamente la porta Luxtronik quando si esce dall'adattatore.\nModifiche minori non funzionali per fare appello alle linee guida per gli sviluppatori.",
-                "es": "Cerrar correctamente el puerto Luxtronik al salir del adaptador.\nCambios menores no funcionales para apelar a las pautas de desarrollo.",
-                "pl": "Prawidłowe zamknięcie portu Luxtronik podczas wychodzenia z adaptera.\nDrobne niefunkcjonalne zmiany, aby odwołać się do wytycznych deweloperów.",
-                "zh-cn": "退出适配器时正确关闭 Luxtronik 端口。\n微小的非功能性更改以吸引开发指南。"
-            },
-            "0.3.0": {
-                "en": "Added sentry integration.\nSet tier level to 2.",
-                "de": "Sentry-Integration hinzugefügt.\nSetze Rangstufe auf 2.",
-                "ru": "Добавлена интеграция с караульной.\nУстановите уровень уровня на 2.",
-                "pt": "Adicionada integração de sentinela.\nDefina o nível de camada como 2.",
-                "nl": "Sentry-integratie toegevoegd.\nStel het niveau in op 2.",
-                "fr": "Ajout de l'intégration de sentinelle.\nDéfinissez le niveau de niveau sur 2.",
-                "it": "Aggiunta l'integrazione della sentinella.\nImposta il livello di livello su 2.",
-                "es": "Integración de centinela agregada.\nEstablezca el nivel de nivel en 2.",
-                "pl": "Dodano integrację wartowników.\nUstaw poziom poziomu na 2.",
-                "zh-cn": "添加哨兵集成。\n将层级设置为 2。"
-            },
-            "0.2.0": {
-                "en": "**Breaking Change:** Fehlerspeicher and Abschaltungen are now each a single state with a JSON object as a value. (#3)\nFixed SelectHandler to create an object of type number.\nAdded all missing states that are now available from the latest luxtronik2 module. (#45)\nAdded watchdog for for both ports. It will restart the adapter if not receiving data after 3 retries.\nNo longer deleting state values but setting them to null if the value is unknown. (#9)\nFixed heating_operation_mode showing the wrong options. (#46)",
-                "de": "** Breaking Change: ** Fehlerspeicher und Abschaltungen sind jetzt jeweils ein einzelner Zustand mit einem JSON-Objekt als Wert. (#3)\nSelectHandler wurde korrigiert, um ein Objekt vom Typ Nummer zu erstellen.\nEs wurden alle fehlenden Status hinzugefügt, die jetzt vom neuesten luxtronik2-Modul verfügbar sind. (# 45)\nWatchdog für beide Ports hinzugefügt. Der Adapter wird neu gestartet, wenn nach 3 Wiederholungsversuchen keine Daten empfangen werden.\nLöschen Sie keine Statuswerte mehr, sondern setzen Sie sie auf null, wenn der Wert unbekannt ist. (# 9)\nProblem, bei dem im Heizungsbetriebsmodus die falschen Optionen angezeigt wurden - gefixt (# 46)",
-                "ru": "** Критическое изменение: ** Fehlerspeicher и Abschaltungen теперь представляют собой отдельное состояние с объектом JSON в качестве значения. (# 3)\nИсправлен SelectHandler для создания объекта типа number.\nДобавлены все недостающие состояния, которые теперь доступны в последней версии модуля luxtronik2. (# 45)\nДобавлен сторожевой таймер для обоих портов. Если после 3 попыток данные не будут получены, адаптер перезапустится.\nЗначения состояния больше не удаляются, а устанавливается значение NULL, если значение неизвестно. (# 9)\nИсправлен режим heating_operation_mode, показывающий неправильные параметры. (# 46)",
-                "pt": "** Mudança decisiva: ** Fehlerspeicher e Abschaltungen agora são, cada um, um único estado com um objeto JSON como valor. (# 3)\nCorrigido o SelectHandler para criar um objeto do tipo number.\nAdicionados todos os estados ausentes que agora estão disponíveis no módulo luxtronik2 mais recente. (# 45)\nAdicionado watchdog para ambas as portas. Ele irá reiniciar o adaptador se não receber dados após 3 tentativas.\nNão mais deletando valores de estado, mas definindo-os como nulos se o valor for desconhecido. (# 9)\nHeat_operation_mode corrigido mostrando as opções erradas. (# 46)",
-                "nl": "** Brekende wijziging: ** Fehlerspeicher en Abschaltungen zijn nu elk een enkele staat met een JSON-object als waarde. (# 3)\nVaste SelectHandler om een object met typenummer te maken.\nAlle ontbrekende toestanden toegevoegd die nu beschikbaar zijn vanuit de nieuwste luxtronik2-module. (# 45)\nWaakhond toegevoegd voor beide poorten. Het zal de adapter opnieuw opstarten als er na 3 nieuwe pogingen geen gegevens zijn ontvangen.\nNiet langer statuswaarden verwijderen, maar ze op nul zetten als de waarde onbekend is. (# 9)\nProbleem verholpen dat heating_operation_mode de verkeerde opties weergeeft. (# 46)",
-                "fr": "** Changement de rupture: ** Fehlerspeicher et Abschaltungen sont désormais chacun un état unique avec un objet JSON comme valeur. (N ° 3)\nCorrection de SelectHandler pour créer un objet de type number.\nAjout de tous les états manquants qui sont maintenant disponibles à partir du dernier module luxtronik2. (N ° 45)\nAjout d'un chien de garde pour les deux ports. Il redémarrera l'adaptateur s'il ne reçoit pas de données après 3 tentatives.\nNe supprimant plus les valeurs d'état mais les définissant sur null si la valeur est inconnue. (# 9)\nCorrection du mode_opération_chauffage affichant les mauvaises options. (N ° 46)",
-                "it": "** Cambiamento decisivo: ** Fehlerspeicher e Abschaltungen sono ora ciascuno un singolo stato con un oggetto JSON come valore. (# 3)\nRisolto il problema con SelectHandler per creare un oggetto di tipo numero.\nAggiunti tutti gli stati mancanti che sono ora disponibili dall'ultimo modulo luxtronik2. (# 45)\nAggiunto watchdog per entrambe le porte. Riavvia l'adattatore se non riceve i dati dopo 3 tentativi.\nNon cancellando più i valori di stato ma impostandoli su null se il valore è sconosciuto. (# 9)\nRisolto il problema con il riscaldamento_operation_mode che mostrava le opzioni sbagliate. (# 46)",
-                "es": "** Cambio rotundo: ** Fehlerspeicher y Abschaltungen ahora son cada uno un solo estado con un objeto JSON como valor. (# 3)\nSe corrigió SelectHandler para crear un objeto de tipo número.\nSe agregaron todos los estados faltantes que ahora están disponibles en el último módulo luxtronik2. (# 45)\nSe agregó un perro guardián para ambos puertos. Reiniciará el adaptador si no recibe datos después de 3 reintentos.\nYa no elimina los valores de estado, sino que los establece en nulos si se desconoce el valor. (# 9)\nSe corrigió el modo de funcionamiento de calefacción que mostraba las opciones incorrectas. (# 46)",
-                "pl": "** Przełomowa zmiana: ** Fehlerspeicher i Abschaltungen mają teraz pojedynczy stan z obiektem JSON jako wartością. (Nr 3)\nNaprawiono SelectHandler, aby utworzyć obiekt o numerze typu.\nDodano wszystkie brakujące stany, które są teraz dostępne w najnowszym module luxtronik2. (# 45)\nDodano watchdog dla obu portów. Jeśli po 3 próbach nie otrzyma danych, nastąpi ponowne uruchomienie adaptera.\nNie usuwa już wartości stanu, ale ustawia je na null, jeśli wartość jest nieznana. (# 9)\nNaprawiono tryb Heating_operation_mode pokazujący złe opcje. (# 46)",
-                "zh-cn": "**突破性的变化：** Fehlerspeicher和Abschaltungen现在都是一个以JSON对象作为值的单一状态。 （＃3）\n修复了SelectHandler创建类型为number的对象的问题。\n添加了所有丢失的状态，这些状态现在可以从最新的luxtronik2模块获得。 （＃45）\n为两个端口添加了看门狗。如果3次重试后仍未接收到数据，它将重新启动适配器。\n不再删除状态值，而是将其设置为null（如果值未知）。 （＃9）\n修复了heating_operation_mode显示错误的选项的问题。 （＃46）"
-            },
-            "0.1.2": {
-                "en": "Fixed buffer issue and added more states",
-                "de": "Pufferproblem behoben und weitere Datenpunkte hinzugefügt",
-                "ru": "Исправлена ​​проблема с буфером и добавлено больше состояний",
-                "pt": "Problema de buffer corrigido e mais estados adicionados",
-                "nl": "Bufferprobleem opgelost en meer staten toegevoegd",
-                "fr": "Correction d'un problème de tampon et ajout d'états supplémentaires",
-                "it": "Risolto il problema del buffer e aggiunti più stati",
-                "es": "Se solucionó el problema del búfer y se agregaron más estados",
-                "pl": "Naprawiono problem z buforem i dodano więcej stanów",
-                "zh-cn": "修复了缓冲区问题并添加了更多状态"
-            },
-            "0.1.1": {
-                "en": "Updated to the latest luxtronik2 dependency",
-                "de": "Auf die neueste luxtronik2-Abhängigkeit aktualisiert",
-                "ru": "Обновлен до последней зависимости luxtronik2",
-                "pt": "Atualizado para a dependência luxtronik2 mais recente",
-                "nl": "Bijgewerkt naar de nieuwste luxtronik2-afhankelijkheid",
-                "fr": "Mise à jour vers la dernière dépendance luxtronik2",
-                "it": "Aggiornato all'ultima dipendenza luxtronik2",
-                "es": "Actualizado a la última dependencia de luxtronik2",
-                "pl": "Zaktualizowano do najnowszej zależności luxtronik2",
-                "zh-cn": "更新到最新的luxtronik2依赖项"
-            },
-            "0.1.0": {
-                "en": "Initial version on NPM containing the latest dependencies",
-                "de": "Erste Version auf NPM mit den neuesten Abhängigkeiten",
-                "ru": "Первоначальная версия на NPM, содержащая последние зависимости",
-                "pt": "Versão inicial no NPM contendo as dependências mais recentes",
-                "nl": "Eerste versie op NPM met de nieuwste afhankelijkheden",
-                "fr": "Version initiale sur NPM contenant les dernières dépendances",
-                "it": "Versione iniziale su NPM contenente le ultime dipendenze",
-                "es": "Versión inicial en NPM que contiene las dependencias más recientes",
-                "pl": "Początkowa wersja na NPM zawierająca najnowsze zależności",
-                "zh-cn": "NPM的初始版本包含最新的依赖项"
-            },
-            "0.0.2": {
-                "en": "Added support for the Luxtronik protocol",
-                "de": "Unterstützung für das Luxtronik-Protokoll hinzugefügt",
-                "ru": "Добавлена ​​поддержка протокола Luxtronik.",
-                "pt": "Adicionado suporte para o protocolo Luxtronik",
-                "nl": "Ondersteuning toegevoegd voor het Luxtronik-protocol",
-                "fr": "Ajout de la prise en charge du protocole Luxtronik",
-                "it": "Aggiunto supporto per il protocollo Luxtronik",
-                "es": "Soporte agregado para el protocolo Luxtronik",
-                "pl": "Dodano obsługę protokołu Luxtronik",
-                "zh-cn": "增加了对Luxtronik协议的支持"
-            },
-            "0.0.1": {
-                "en": "initial release",
-                "de": "Erstveröffentlichung",
-                "ru": "Начальная версия",
-                "pt": "lançamento inicial",
-                "nl": "Eerste uitgave",
-                "fr": "Première version",
-                "it": "Versione iniziale",
-                "es": "Versión inicial",
-                "pl": "Pierwsze wydanie",
-                "zh-cn": "首次出版"
-            }
-        },
-        "title": "Luxtronik 2",
-        "titleLang": {
-            "en": "Luxtronik 2",
-            "de": "Luxtronik 2",
-            "ru": "Люкстроник 2",
-            "pt": "Luxtronik 2",
-            "nl": "Luxtronik 2",
-            "fr": "Luxtronik 2",
-            "it": "Luxtronik 2",
-            "es": "Luxtronik 2",
-            "pl": "Luxtronik 2",
-            "zh-cn": "Luxtronik 2"
-        },
-        "desc": {
-            "en": "Connects to Luxtronik 2 heatpump controllers over LAN and WebSocket",
-            "de": "Verbindung zu Luxtronik 2 Heatpump-Controllern über LAN und WebSocket",
-            "ru": "Подключается к контроллерам теплового насоса Luxtronik 2 через LAN и WebSocket",
-            "pt": "Conecta-se a controladores de bomba de calor Luxtronik 2 por LAN e WebSocket",
-            "nl": "Verbindt met Luxtronik 2 warmtepompcontrollers via LAN en WebSocket",
-            "fr": "Se connecte aux contrôleurs de pompe à chaleur Luxtronik 2 via LAN et WebSocket",
-            "it": "Si collega ai controller della pompa di calore Luxtronik 2 su LAN e WebSocket",
-            "es": "Se conecta a controladores de bomba de calor Luxtronik 2 a través de LAN y WebSocket",
-            "pl": "Łączy się ze sterownikami pompy ciepła Luxtronik 2 przez LAN i WebSocket",
-            "zh-cn": "通过LAN和WebSocket连接到Luxtronik 2热泵控制器"
-        },
-        "authors": [
-            "UncleSamSwiss <samuel.weibel@gmail.com>"
-        ],
-        "keywords": [
-            "heatpump",
-            "websocket",
-            "luxtronik"
-        ],
-        "license": "Apache-2.0",
-        "platform": "Javascript/Node.js",
-        "main": "build/main.js",
-        "icon": "luxtronik2.png",
-        "enabled": true,
-        "extIcon": "https://raw.githubusercontent.com/UncleSamSwiss/ioBroker.luxtronik2/master/admin/luxtronik2.png",
-        "readme": "https://github.com/UncleSamSwiss/ioBroker.luxtronik2/blob/master/README.md",
-        "loglevel": "info",
-        "mode": "daemon",
-        "type": "climate-control",
-        "compact": true,
-        "connectionType": "local",
-        "dataSource": "poll",
-        "materialize": true,
-        "tier": 2,
-        "dependencies": [
-            {
-                "js-controller": ">=2.0.0"
-            }
-        ],
-        "globalDependencies": [
-            {
-                "admin": ">=4.0.9"
-            }
-        ],
-        "plugins": {
-            "sentry": {
-                "dsn": "https://781afb355b0947a0af84bb9e704d79fe@sentry.iobroker.net/137",
-                "pathWhitelist": [
-                    "luxtronik2"
-                ]
-            }
-        }
+  "common": {
+    "name": "luxtronik2",
+    "version": "0.4.2",
+    "news": {
+      "0.4.2": {
+        "en": "Filtering out empty time log entries\nUpdated to the latest luxtronik2 dependency",
+        "de": "Herausfiltern leerer Zeitprotokolleinträge\nAktualisiert auf die neueste luxtronik2-Abhängigkeit",
+        "ru": "Фильтрация пустых записей журнала учета рабочего времени\nОбновлен до последней зависимости luxtronik2",
+        "pt": "Filtrando entradas de registro de tempo vazias\nAtualizado para a última dependência do luxtronik2",
+        "nl": "Lege tijdlogboekvermeldingen eruit filteren\nBijgewerkt naar de nieuwste luxtronik2-afhankelijkheid",
+        "fr": "Filtrage des entrées de journal de temps vides\nMise à jour vers la dernière dépendance luxtronik2",
+        "it": "Filtraggio delle voci di registro orari vuote\nAggiornato all'ultima dipendenza da luxtronik2",
+        "es": "Filtrado de entradas de registro de tiempo vacías\nActualizado a la última dependencia de luxtronik2",
+        "pl": "Filtrowanie pustych wpisów dziennika czasu\nZaktualizowano do najnowszej zależności luxtronik2",
+        "zh-cn": "过滤掉空的时间日志条目\n更新到最新的 luxtronik2 依赖项"
+      },
+      "0.4.1": {
+        "en": "Added missing MK1 parameters",
+        "de": "Fehlende MK1-Parameter hinzugefügt",
+        "ru": "Добавлены недостающие параметры MK1",
+        "pt": "Adicionados parâmetros MK1 ausentes",
+        "nl": "Ontbrekende MK1-parameters toegevoegd",
+        "fr": "Ajout des paramètres MK1 manquants",
+        "it": "Aggiunti parametri MK1 mancanti",
+        "es": "Se agregaron los parámetros MK1 faltantes",
+        "pl": "Dodano brakujące parametry MK1",
+        "zh-cn": "添加了缺失的 MK1 参数"
+      },
+      "0.4.0": {
+        "en": "Updated to the latest luxtronik2 dependency (should fix most known issues)\nUpdated all (other) dependencies",
+        "de": "Auf die neueste luxtronik2-Abhängigkeit aktualisiert (sollte die meisten bekannten Probleme beheben)\nAlle (anderen) Abhängigkeiten aktualisiert",
+        "ru": "Обновлено до последней зависимости luxtronik2 (должно исправить большинство известных проблем)\nОбновлены все (другие) зависимости",
+        "pt": "Atualizado para a dependência luxtronik2 mais recente (deve corrigir a maioria dos problemas conhecidos)\nTodas as (outras) dependências atualizadas",
+        "nl": "Bijgewerkt naar de nieuwste luxtronik2-afhankelijkheid (zou de meeste bekende problemen moeten oplossen)\nAlle (andere) afhankelijkheden bijgewerkt",
+        "fr": "Mise à jour vers la dernière dépendance luxtronik2 (devrait résoudre les problèmes les plus connus)\nMise à jour de toutes les (autres) dépendances",
+        "it": "Aggiornato all'ultima dipendenza luxtronik2 (dovrebbe risolvere i problemi più noti)\nAggiornate tutte le (altre) dipendenze",
+        "es": "Actualizado a la última dependencia de luxtronik2 (debería solucionar la mayoría de los problemas conocidos)\nSe actualizaron todas las (otras) dependencias",
+        "pl": "Zaktualizowano do najnowszej zależności luxtronik2 (powinna rozwiązać większość znanych problemów)\nZaktualizowano wszystkie (inne) zależności",
+        "zh-cn": "更新到最新的 luxtronik2 依赖项（应修复大多数已知问题）\n更新了所有（其他）依赖项"
+      },
+      "0.3.2": {
+        "en": "Improved Sentry reporting.",
+        "de": "Verbesserte Sentry-Berichterstellung.",
+        "ru": "Улучшенная система отчетов Sentry.",
+        "pt": "Relatório de Sentinelas aprimorado.",
+        "nl": "Verbeterde Sentry-rapportage.",
+        "fr": "Rapports Sentry améliorés.",
+        "it": "Segnalazione sentinella migliorata.",
+        "es": "Informes de centinela mejorados.",
+        "pl": "Ulepszone raportowanie Strażników.",
+        "zh-cn": "改进了哨兵报告。"
+      },
+      "0.3.1": {
+        "en": "Properly closing Luxtronik port when exiting the adapter.\nMinor non-functional changes to appeal to dev guidelines.",
+        "de": "Richtiges Schließen des Luxtronik-Ports beim Verlassen des Adapters.\nGeringfügige nicht-funktionale Änderungen, um den Entwicklerrichtlinien zu entsprechen.",
+        "ru": "Правильное закрытие порта Luxtronik при выходе из адаптера.\nНезначительные нефункциональные изменения в соответствии с рекомендациями разработчиков.",
+        "pt": "Fechando corretamente a porta Luxtronik ao sair do adaptador.\nPequenas alterações não funcionais para apelar às diretrizes de desenvolvimento.",
+        "nl": "De Luxtronik-poort goed sluiten bij het verlaten van de adapter.\nKleine niet-functionele wijzigingen om aan de richtlijnen voor ontwikkelaars te voldoen.",
+        "fr": "Fermeture correcte du port Luxtronik lors de la sortie de l'adaptateur.\nModifications mineures non fonctionnelles pour faire appel aux directives de développement.",
+        "it": "Chiudere correttamente la porta Luxtronik quando si esce dall'adattatore.\nModifiche minori non funzionali per fare appello alle linee guida per gli sviluppatori.",
+        "es": "Cerrar correctamente el puerto Luxtronik al salir del adaptador.\nCambios menores no funcionales para apelar a las pautas de desarrollo.",
+        "pl": "Prawidłowe zamknięcie portu Luxtronik podczas wychodzenia z adaptera.\nDrobne niefunkcjonalne zmiany, aby odwołać się do wytycznych deweloperów.",
+        "zh-cn": "退出适配器时正确关闭 Luxtronik 端口。\n微小的非功能性更改以吸引开发指南。"
+      },
+      "0.3.0": {
+        "en": "Added sentry integration.\nSet tier level to 2.",
+        "de": "Sentry-Integration hinzugefügt.\nSetze Rangstufe auf 2.",
+        "ru": "Добавлена интеграция с караульной.\nУстановите уровень уровня на 2.",
+        "pt": "Adicionada integração de sentinela.\nDefina o nível de camada como 2.",
+        "nl": "Sentry-integratie toegevoegd.\nStel het niveau in op 2.",
+        "fr": "Ajout de l'intégration de sentinelle.\nDéfinissez le niveau de niveau sur 2.",
+        "it": "Aggiunta l'integrazione della sentinella.\nImposta il livello di livello su 2.",
+        "es": "Integración de centinela agregada.\nEstablezca el nivel de nivel en 2.",
+        "pl": "Dodano integrację wartowników.\nUstaw poziom poziomu na 2.",
+        "zh-cn": "添加哨兵集成。\n将层级设置为 2。"
+      },
+      "0.2.0": {
+        "en": "**Breaking Change:** Fehlerspeicher and Abschaltungen are now each a single state with a JSON object as a value. (#3)\nFixed SelectHandler to create an object of type number.\nAdded all missing states that are now available from the latest luxtronik2 module. (#45)\nAdded watchdog for for both ports. It will restart the adapter if not receiving data after 3 retries.\nNo longer deleting state values but setting them to null if the value is unknown. (#9)\nFixed heating_operation_mode showing the wrong options. (#46)",
+        "de": "** Breaking Change: ** Fehlerspeicher und Abschaltungen sind jetzt jeweils ein einzelner Zustand mit einem JSON-Objekt als Wert. (#3)\nSelectHandler wurde korrigiert, um ein Objekt vom Typ Nummer zu erstellen.\nEs wurden alle fehlenden Status hinzugefügt, die jetzt vom neuesten luxtronik2-Modul verfügbar sind. (# 45)\nWatchdog für beide Ports hinzugefügt. Der Adapter wird neu gestartet, wenn nach 3 Wiederholungsversuchen keine Daten empfangen werden.\nLöschen Sie keine Statuswerte mehr, sondern setzen Sie sie auf null, wenn der Wert unbekannt ist. (# 9)\nProblem, bei dem im Heizungsbetriebsmodus die falschen Optionen angezeigt wurden - gefixt (# 46)",
+        "ru": "** Критическое изменение: ** Fehlerspeicher и Abschaltungen теперь представляют собой отдельное состояние с объектом JSON в качестве значения. (# 3)\nИсправлен SelectHandler для создания объекта типа number.\nДобавлены все недостающие состояния, которые теперь доступны в последней версии модуля luxtronik2. (# 45)\nДобавлен сторожевой таймер для обоих портов. Если после 3 попыток данные не будут получены, адаптер перезапустится.\nЗначения состояния больше не удаляются, а устанавливается значение NULL, если значение неизвестно. (# 9)\nИсправлен режим heating_operation_mode, показывающий неправильные параметры. (# 46)",
+        "pt": "** Mudança decisiva: ** Fehlerspeicher e Abschaltungen agora são, cada um, um único estado com um objeto JSON como valor. (# 3)\nCorrigido o SelectHandler para criar um objeto do tipo number.\nAdicionados todos os estados ausentes que agora estão disponíveis no módulo luxtronik2 mais recente. (# 45)\nAdicionado watchdog para ambas as portas. Ele irá reiniciar o adaptador se não receber dados após 3 tentativas.\nNão mais deletando valores de estado, mas definindo-os como nulos se o valor for desconhecido. (# 9)\nHeat_operation_mode corrigido mostrando as opções erradas. (# 46)",
+        "nl": "** Brekende wijziging: ** Fehlerspeicher en Abschaltungen zijn nu elk een enkele staat met een JSON-object als waarde. (# 3)\nVaste SelectHandler om een object met typenummer te maken.\nAlle ontbrekende toestanden toegevoegd die nu beschikbaar zijn vanuit de nieuwste luxtronik2-module. (# 45)\nWaakhond toegevoegd voor beide poorten. Het zal de adapter opnieuw opstarten als er na 3 nieuwe pogingen geen gegevens zijn ontvangen.\nNiet langer statuswaarden verwijderen, maar ze op nul zetten als de waarde onbekend is. (# 9)\nProbleem verholpen dat heating_operation_mode de verkeerde opties weergeeft. (# 46)",
+        "fr": "** Changement de rupture: ** Fehlerspeicher et Abschaltungen sont désormais chacun un état unique avec un objet JSON comme valeur. (N ° 3)\nCorrection de SelectHandler pour créer un objet de type number.\nAjout de tous les états manquants qui sont maintenant disponibles à partir du dernier module luxtronik2. (N ° 45)\nAjout d'un chien de garde pour les deux ports. Il redémarrera l'adaptateur s'il ne reçoit pas de données après 3 tentatives.\nNe supprimant plus les valeurs d'état mais les définissant sur null si la valeur est inconnue. (# 9)\nCorrection du mode_opération_chauffage affichant les mauvaises options. (N ° 46)",
+        "it": "** Cambiamento decisivo: ** Fehlerspeicher e Abschaltungen sono ora ciascuno un singolo stato con un oggetto JSON come valore. (# 3)\nRisolto il problema con SelectHandler per creare un oggetto di tipo numero.\nAggiunti tutti gli stati mancanti che sono ora disponibili dall'ultimo modulo luxtronik2. (# 45)\nAggiunto watchdog per entrambe le porte. Riavvia l'adattatore se non riceve i dati dopo 3 tentativi.\nNon cancellando più i valori di stato ma impostandoli su null se il valore è sconosciuto. (# 9)\nRisolto il problema con il riscaldamento_operation_mode che mostrava le opzioni sbagliate. (# 46)",
+        "es": "** Cambio rotundo: ** Fehlerspeicher y Abschaltungen ahora son cada uno un solo estado con un objeto JSON como valor. (# 3)\nSe corrigió SelectHandler para crear un objeto de tipo número.\nSe agregaron todos los estados faltantes que ahora están disponibles en el último módulo luxtronik2. (# 45)\nSe agregó un perro guardián para ambos puertos. Reiniciará el adaptador si no recibe datos después de 3 reintentos.\nYa no elimina los valores de estado, sino que los establece en nulos si se desconoce el valor. (# 9)\nSe corrigió el modo de funcionamiento de calefacción que mostraba las opciones incorrectas. (# 46)",
+        "pl": "** Przełomowa zmiana: ** Fehlerspeicher i Abschaltungen mają teraz pojedynczy stan z obiektem JSON jako wartością. (Nr 3)\nNaprawiono SelectHandler, aby utworzyć obiekt o numerze typu.\nDodano wszystkie brakujące stany, które są teraz dostępne w najnowszym module luxtronik2. (# 45)\nDodano watchdog dla obu portów. Jeśli po 3 próbach nie otrzyma danych, nastąpi ponowne uruchomienie adaptera.\nNie usuwa już wartości stanu, ale ustawia je na null, jeśli wartość jest nieznana. (# 9)\nNaprawiono tryb Heating_operation_mode pokazujący złe opcje. (# 46)",
+        "zh-cn": "**突破性的变化：** Fehlerspeicher和Abschaltungen现在都是一个以JSON对象作为值的单一状态。 （＃3）\n修复了SelectHandler创建类型为number的对象的问题。\n添加了所有丢失的状态，这些状态现在可以从最新的luxtronik2模块获得。 （＃45）\n为两个端口添加了看门狗。如果3次重试后仍未接收到数据，它将重新启动适配器。\n不再删除状态值，而是将其设置为null（如果值未知）。 （＃9）\n修复了heating_operation_mode显示错误的选项的问题。 （＃46）"
+      },
+      "0.1.2": {
+        "en": "Fixed buffer issue and added more states",
+        "de": "Pufferproblem behoben und weitere Datenpunkte hinzugefügt",
+        "ru": "Исправлена ​​проблема с буфером и добавлено больше состояний",
+        "pt": "Problema de buffer corrigido e mais estados adicionados",
+        "nl": "Bufferprobleem opgelost en meer staten toegevoegd",
+        "fr": "Correction d'un problème de tampon et ajout d'états supplémentaires",
+        "it": "Risolto il problema del buffer e aggiunti più stati",
+        "es": "Se solucionó el problema del búfer y se agregaron más estados",
+        "pl": "Naprawiono problem z buforem i dodano więcej stanów",
+        "zh-cn": "修复了缓冲区问题并添加了更多状态"
+      },
+      "0.1.1": {
+        "en": "Updated to the latest luxtronik2 dependency",
+        "de": "Auf die neueste luxtronik2-Abhängigkeit aktualisiert",
+        "ru": "Обновлен до последней зависимости luxtronik2",
+        "pt": "Atualizado para a dependência luxtronik2 mais recente",
+        "nl": "Bijgewerkt naar de nieuwste luxtronik2-afhankelijkheid",
+        "fr": "Mise à jour vers la dernière dépendance luxtronik2",
+        "it": "Aggiornato all'ultima dipendenza luxtronik2",
+        "es": "Actualizado a la última dependencia de luxtronik2",
+        "pl": "Zaktualizowano do najnowszej zależności luxtronik2",
+        "zh-cn": "更新到最新的luxtronik2依赖项"
+      },
+      "0.1.0": {
+        "en": "Initial version on NPM containing the latest dependencies",
+        "de": "Erste Version auf NPM mit den neuesten Abhängigkeiten",
+        "ru": "Первоначальная версия на NPM, содержащая последние зависимости",
+        "pt": "Versão inicial no NPM contendo as dependências mais recentes",
+        "nl": "Eerste versie op NPM met de nieuwste afhankelijkheden",
+        "fr": "Version initiale sur NPM contenant les dernières dépendances",
+        "it": "Versione iniziale su NPM contenente le ultime dipendenze",
+        "es": "Versión inicial en NPM que contiene las dependencias más recientes",
+        "pl": "Początkowa wersja na NPM zawierająca najnowsze zależności",
+        "zh-cn": "NPM的初始版本包含最新的依赖项"
+      },
+      "0.0.2": {
+        "en": "Added support for the Luxtronik protocol",
+        "de": "Unterstützung für das Luxtronik-Protokoll hinzugefügt",
+        "ru": "Добавлена ​​поддержка протокола Luxtronik.",
+        "pt": "Adicionado suporte para o protocolo Luxtronik",
+        "nl": "Ondersteuning toegevoegd voor het Luxtronik-protocol",
+        "fr": "Ajout de la prise en charge du protocole Luxtronik",
+        "it": "Aggiunto supporto per il protocollo Luxtronik",
+        "es": "Soporte agregado para el protocolo Luxtronik",
+        "pl": "Dodano obsługę protokołu Luxtronik",
+        "zh-cn": "增加了对Luxtronik协议的支持"
+      },
+      "0.0.1": {
+        "en": "initial release",
+        "de": "Erstveröffentlichung",
+        "ru": "Начальная версия",
+        "pt": "lançamento inicial",
+        "nl": "Eerste uitgave",
+        "fr": "Première version",
+        "it": "Versione iniziale",
+        "es": "Versión inicial",
+        "pl": "Pierwsze wydanie",
+        "zh-cn": "首次出版"
+      }
     },
-    "encryptedNative": [
-        "password"
-    ],
-    "protectedNative": [
-        "password"
-    ],
-    "native": {
-        "host": "",
-        "port": 8214,
-        "luxPort": 8888,
-        "password": "",
-        "refreshInterval": 5
+    "title": "Luxtronik 2",
+    "titleLang": {
+      "en": "Luxtronik 2",
+      "de": "Luxtronik 2",
+      "ru": "Люкстроник 2",
+      "pt": "Luxtronik 2",
+      "nl": "Luxtronik 2",
+      "fr": "Luxtronik 2",
+      "it": "Luxtronik 2",
+      "es": "Luxtronik 2",
+      "pl": "Luxtronik 2",
+      "zh-cn": "Luxtronik 2"
     },
-    "objects": [],
-    "instanceObjects": [
-        {
-            "_id": "info",
-            "type": "channel",
-            "common": {
-                "name": "Information"
-            },
-            "native": {}
-        },
-        {
-            "_id": "info.connection",
-            "type": "state",
-            "common": {
-                "role": "indicator.connected",
-                "name": "Device or service connected",
-                "type": "boolean",
-                "read": true,
-                "write": false,
-                "def": false
-            },
-            "native": {}
-        }
-    ]
+    "desc": {
+      "en": "Connects to Luxtronik 2 heatpump controllers over LAN and WebSocket",
+      "de": "Verbindung zu Luxtronik 2 Heatpump-Controllern über LAN und WebSocket",
+      "ru": "Подключается к контроллерам теплового насоса Luxtronik 2 через LAN и WebSocket",
+      "pt": "Conecta-se a controladores de bomba de calor Luxtronik 2 por LAN e WebSocket",
+      "nl": "Verbindt met Luxtronik 2 warmtepompcontrollers via LAN en WebSocket",
+      "fr": "Se connecte aux contrôleurs de pompe à chaleur Luxtronik 2 via LAN et WebSocket",
+      "it": "Si collega ai controller della pompa di calore Luxtronik 2 su LAN e WebSocket",
+      "es": "Se conecta a controladores de bomba de calor Luxtronik 2 a través de LAN y WebSocket",
+      "pl": "Łączy się ze sterownikami pompy ciepła Luxtronik 2 przez LAN i WebSocket",
+      "zh-cn": "通过LAN和WebSocket连接到Luxtronik 2热泵控制器"
+    },
+    "authors": [
+      "UncleSamSwiss <samuel.weibel@gmail.com>"
+    ],
+    "keywords": [
+      "heatpump",
+      "websocket",
+      "luxtronik"
+    ],
+    "license": "Apache-2.0",
+    "platform": "Javascript/Node.js",
+    "main": "build/main.js",
+    "icon": "luxtronik2.png",
+    "enabled": true,
+    "extIcon": "https://raw.githubusercontent.com/UncleSamSwiss/ioBroker.luxtronik2/master/admin/luxtronik2.png",
+    "readme": "https://github.com/UncleSamSwiss/ioBroker.luxtronik2/blob/master/README.md",
+    "loglevel": "info",
+    "mode": "daemon",
+    "type": "climate-control",
+    "compact": true,
+    "connectionType": "local",
+    "dataSource": "poll",
+    "materialize": true,
+    "tier": 2,
+    "dependencies": [
+      {
+        "js-controller": ">=6.0.11"
+      }
+    ],
+    "globalDependencies": [
+      {
+        "admin": ">=4.0.9"
+      }
+    ],
+    "plugins": {
+      "sentry": {
+        "dsn": "https://781afb355b0947a0af84bb9e704d79fe@sentry.iobroker.net/137",
+        "pathWhitelist": [
+          "luxtronik2"
+        ]
+      }
+    }
+  },
+  "encryptedNative": [
+    "password"
+  ],
+  "protectedNative": [
+    "password"
+  ],
+  "native": {
+    "host": "",
+    "port": 8214,
+    "luxPort": 8888,
+    "password": "",
+    "refreshInterval": 5
+  },
+  "objects": [],
+  "instanceObjects": [
+    {
+      "_id": "info",
+      "type": "channel",
+      "common": {
+        "name": "Information"
+      },
+      "native": {}
+    },
+    {
+      "_id": "info.connection",
+      "type": "state",
+      "common": {
+        "role": "indicator.connected",
+        "name": "Device or service connected",
+        "type": "boolean",
+        "read": true,
+        "write": false,
+        "def": false
+      },
+      "native": {}
+    }
+  ]
 }
