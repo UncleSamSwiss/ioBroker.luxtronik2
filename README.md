@@ -26,6 +26,10 @@ Connects to Luxtronik 2 heatpump controllers over LAN and WebSocket
 	### **WORK IN PROGRESS**
 -->
 
+
+### **WORK IN PROGRESS**
+- (ioBroker-Bot) Adapter requires js-controller >= 6.0.11 now.
+
 ### 0.4.2 (2022-01-25)
 
 -   (UncleSamSwiss) Filtering out empty time log entries
