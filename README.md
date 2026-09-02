@@ -25,6 +25,10 @@ Connects to Luxtronik 2 heatpump controllers over LAN and WebSocket
 	Placeholder for the next version (at the beginning of the line):
 	### **WORK IN PROGRESS**
 -->
+### 0.4.2-UKI (2026-09-02)
+-   (byteschubser, supported by Claude AI) fix AbschaltungVD
+-   (byteschubser, supported by Claude AI) fix nested Energy Monitoring Structures
+-   (byteschubser, supported by Claude AI) data mapping structures for luxtronik2 >= 2.7 implemented
 
 ### 0.4.2 (2022-01-25)
 

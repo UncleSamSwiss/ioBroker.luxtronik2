@@ -467,39 +467,8 @@ class Luxtronik2 extends utils.Adapter {
                     continue;
                 }
 
-                const itemIds: string[] = [];
-
-                for (let j = 0; j < section.item.length; j++) {
-                    const item = section.item[j];
-                    try {
-                        const itemHandler = this.createHandler(item, sectionHandler.id, itemIds);
-                        if (!itemHandler) {
-                            continue;
-                        }
-                        if (!this.handlers[itemHandler.id]) {
-                            this.log.silly(`Creating ${itemHandler.id}`);
-                            await itemHandler.extendObjectAsync();
-                            this.handlers[itemHandler.id] = itemHandler;
-                        }
-
-                        if (this.requestedUpdates.length === 0) {
-                            this.log.silly(`Setting state of ${itemHandler.id}`);
-                            await itemHandler.setStateAsync();
-                        } else {
-                            const updateIndex = this.requestedUpdates.findIndex((ch) => ch.id === itemHandler.id);
-                            if (updateIndex >= 0) {
-                                const cmd = itemHandler.createSetCommand(this.requestedUpdates[updateIndex].value);
-                                this.log.debug(`Sending ${cmd}`);
-                                this.getSentry()?.addBreadcrumb({ type: 'http', category: 'ws', data: { url: cmd } });
-                                this.webSocket?.send(cmd);
-                                this.requestedUpdates.splice(updateIndex);
-                                shouldSave = true;
-                            }
-                        }
-                    } catch (error) {
-                        this.log.error(`Couldn't handle '${sectionHandler.id}' -> '${item.name[0]}': ${error}`);
-                        this.getSentry()?.captureException(error, { extra: { section: sectionHandler.id, item } });
-                    }
+                if (await this.handleContentItems(section.item, sectionHandler.id)) {
+                    shouldSave = true;
                 }
             }
 
@@ -512,6 +481,64 @@ class Luxtronik2 extends utils.Adapter {
                 this.requestNextContent();
             }
         }
+    }
+
+    /**
+     * Creates/updates the states for a list of content items. Nested sub-sections
+     * (e.g. "Energiemonitor" -> "Wärmemenge" -> "Heizung" in newer firmware) are
+     * processed recursively instead of being treated as a leaf value.
+     * Returns true if a SAVE command needs to be sent afterwards.
+     */
+    private async handleContentItems(items: (ContentSection | ContentItem)[], parentId: string): Promise<boolean> {
+        let shouldSave = false;
+        const existingIds: string[] = [];
+        for (const item of items) {
+            try {
+                const handler = this.createHandler(item, parentId, existingIds);
+                if (!handler) {
+                    continue;
+                }
+                if (!this.handlers[handler.id]) {
+                    this.log.silly(`Creating ${handler.id}`);
+                    await handler.extendObjectAsync();
+                    this.handlers[handler.id] = handler;
+                }
+
+                if (handler instanceof TimeLogSectionHandler) {
+                    // time log sub-sections are actually states
+                    await handler.setStateAsync();
+                    continue;
+                }
+
+                if (handler instanceof SectionHandler) {
+                    // nested sub-section: recurse into its children
+                    const children = 'item' in item ? item.item : [];
+                    if (await this.handleContentItems(children, handler.id)) {
+                        shouldSave = true;
+                    }
+                    continue;
+                }
+
+                if (this.requestedUpdates.length === 0) {
+                    this.log.silly(`Setting state of ${handler.id}`);
+                    await handler.setStateAsync();
+                } else {
+                    const updateIndex = this.requestedUpdates.findIndex((ch) => ch.id === handler.id);
+                    if (updateIndex >= 0) {
+                        const cmd = handler.createSetCommand(this.requestedUpdates[updateIndex].value);
+                        this.log.debug(`Sending ${cmd}`);
+                        this.getSentry()?.addBreadcrumb({ type: 'http', category: 'ws', data: { url: cmd } });
+                        this.webSocket?.send(cmd);
+                        this.requestedUpdates.splice(updateIndex);
+                        shouldSave = true;
+                    }
+                }
+            } catch (error) {
+                this.log.error(`Couldn't handle '${parentId}' -> '${item.name[0]}': ${error}`);
+                this.getSentry()?.captureException(error, { extra: { section: parentId, item } });
+            }
+        }
+        return shouldSave;
     }
 
     private requestAllContent(): void {
@@ -572,14 +599,16 @@ class Luxtronik2 extends utils.Adapter {
             }
         }
 
-        if ('option' in item) {
+        if ('option' in item && 'raw' in item) {
             return new SelectHandler(id, item, this);
         }
 
-        if ('min' in item) {
+        if ('min' in item && 'max' in item && 'div' in item && 'raw' in item) {
             return new NumberHandler(id, item, this);
         }
 
+        // some firmware versions send partial items (e.g. "Abschaltung VD" in
+        // "Ablaufzeiten" has a "min" but no "raw"/"value"): fall back to read-only
         return new ReadOnlyHandler(id, item, this);
     }
 
@@ -665,7 +694,7 @@ class TimeLogSectionHandler extends SectionHandler {
 
     async setStateAsync(): Promise<void> {
         const value = this.item.item.reduce<Record<string, string>>(
-            (old, item) => ({ ...old, [item.name[0]]: item.value[0] }),
+            (old, item) => ({ ...old, [item.name[0]]: item.value?.[0] ?? '' }),
             {},
         );
         await this.adapter.setStateValueAsync(this.id, JSON.stringify(value));
@@ -680,8 +709,8 @@ class ReadOnlyHandler extends ItemHandler<ReadOnlyContentItem> {
             read: true,
             write: false,
         };
-        const value = this.item.value[0];
-        const match = value.match(this.numberUnitMatch);
+        const value = this.item.value?.[0];
+        const match = value?.match(this.numberUnitMatch);
         if (match) {
             common.type = 'number';
             if (match[3]) {
@@ -703,7 +732,12 @@ class ReadOnlyHandler extends ItemHandler<ReadOnlyContentItem> {
     }
 
     async setStateAsync(): Promise<void> {
-        const value = this.item.value[0];
+        const value = this.item.value?.[0];
+        if (value === undefined) {
+            // some firmware versions send items without a value (e.g. in "Ablaufzeiten")
+            await this.adapter.setStateValueAsync(this.id, null);
+            return;
+        }
         const match = value.match(this.numberUnitMatch);
         if (match) {
             const numberValue = match[1];
@@ -746,8 +780,12 @@ class SelectHandler extends ItemHandler<SelectContentItem> {
     }
 
     async setStateAsync(): Promise<void> {
-        const value = parseInt(this.item.raw[0]);
-        await this.adapter.setStateValueAsync(this.id, value);
+        const raw = this.item.raw?.[0];
+        if (raw === undefined) {
+            await this.adapter.setStateValueAsync(this.id, null);
+            return;
+        }
+        await this.adapter.setStateValueAsync(this.id, parseInt(raw));
     }
 
     createSetCommand(value: string | number): string {
@@ -757,7 +795,7 @@ class SelectHandler extends ItemHandler<SelectContentItem> {
 
 class NumberHandler extends ItemHandler<NumberContentItem> {
     async extendObjectAsync(): Promise<void> {
-        const unit = this.item.unit[0].trim();
+        const unit = this.item.unit?.[0]?.trim() ?? '';
         const min = parseInt(this.item.min[0]);
         const max = parseInt(this.item.max[0]);
         const div = parseInt(this.item.div[0]);

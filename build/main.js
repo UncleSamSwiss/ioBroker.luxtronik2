@@ -1,7 +1,11 @@
 "use strict";
 var __createBinding = (this && this.__createBinding) || (Object.create ? (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
-    Object.defineProperty(o, k2, { enumerable: true, get: function() { return m[k]; } });
+    var desc = Object.getOwnPropertyDescriptor(m, k);
+    if (!desc || ("get" in desc ? !m.__esModule : desc.writable || desc.configurable)) {
+      desc = { enumerable: true, get: function() { return m[k]; } };
+    }
+    Object.defineProperty(o, k2, desc);
 }) : (function(o, m, k, k2) {
     if (k2 === undefined) k2 = k;
     o[k2] = m[k];
@@ -381,7 +385,7 @@ class Luxtronik2 extends utils.Adapter {
         });
     }
     async handleWsMessageAsync(msg) {
-        var _a, _b, _c, _d, _e;
+        var _a, _b;
         const message = await (0, xml2js_1.parseStringPromise)(msg);
         this.log.debug(JSON.stringify(message));
         if ('Navigation' in message) {
@@ -431,51 +435,77 @@ class Luxtronik2 extends utils.Adapter {
                     await sectionHandler.setStateAsync();
                     continue;
                 }
-                const itemIds = [];
-                for (let j = 0; j < section.item.length; j++) {
-                    const item = section.item[j];
-                    try {
-                        const itemHandler = this.createHandler(item, sectionHandler.id, itemIds);
-                        if (!itemHandler) {
-                            continue;
-                        }
-                        if (!this.handlers[itemHandler.id]) {
-                            this.log.silly(`Creating ${itemHandler.id}`);
-                            await itemHandler.extendObjectAsync();
-                            this.handlers[itemHandler.id] = itemHandler;
-                        }
-                        if (this.requestedUpdates.length === 0) {
-                            this.log.silly(`Setting state of ${itemHandler.id}`);
-                            await itemHandler.setStateAsync();
-                        }
-                        else {
-                            const updateIndex = this.requestedUpdates.findIndex((ch) => ch.id === itemHandler.id);
-                            if (updateIndex >= 0) {
-                                const cmd = itemHandler.createSetCommand(this.requestedUpdates[updateIndex].value);
-                                this.log.debug(`Sending ${cmd}`);
-                                (_a = this.getSentry()) === null || _a === void 0 ? void 0 : _a.addBreadcrumb({ type: 'http', category: 'ws', data: { url: cmd } });
-                                (_b = this.webSocket) === null || _b === void 0 ? void 0 : _b.send(cmd);
-                                this.requestedUpdates.splice(updateIndex);
-                                shouldSave = true;
-                            }
-                        }
-                    }
-                    catch (error) {
-                        this.log.error(`Couldn't handle '${sectionHandler.id}' -> '${item.name[0]}': ${error}`);
-                        (_c = this.getSentry()) === null || _c === void 0 ? void 0 : _c.captureException(error, { extra: { section: sectionHandler.id, item } });
-                    }
+                if (await this.handleContentItems(section.item, sectionHandler.id)) {
+                    shouldSave = true;
                 }
             }
             if (shouldSave) {
                 this.log.debug('Saving');
-                (_d = this.getSentry()) === null || _d === void 0 ? void 0 : _d.addBreadcrumb({ type: 'http', category: 'ws', data: { url: 'SAVE;1' } });
-                (_e = this.webSocket) === null || _e === void 0 ? void 0 : _e.send('SAVE;1');
+                (_a = this.getSentry()) === null || _a === void 0 ? void 0 : _a.addBreadcrumb({ type: 'http', category: 'ws', data: { url: 'SAVE;1' } });
+                (_b = this.webSocket) === null || _b === void 0 ? void 0 : _b.send('SAVE;1');
                 this.isSaving = true;
             }
             else {
                 this.requestNextContent();
             }
         }
+    }
+    /**
+     * Creates/updates the states for a list of content items. Nested sub-sections
+     * (e.g. "Energiemonitor" -> "Wärmemenge" -> "Heizung" in newer firmware) are
+     * processed recursively instead of being treated as a leaf value.
+     * Returns true if a SAVE command needs to be sent afterwards.
+     */
+    async handleContentItems(items, parentId) {
+        var _a, _b, _c;
+        let shouldSave = false;
+        const existingIds = [];
+        for (const item of items) {
+            try {
+                const handler = this.createHandler(item, parentId, existingIds);
+                if (!handler) {
+                    continue;
+                }
+                if (!this.handlers[handler.id]) {
+                    this.log.silly(`Creating ${handler.id}`);
+                    await handler.extendObjectAsync();
+                    this.handlers[handler.id] = handler;
+                }
+                if (handler instanceof TimeLogSectionHandler) {
+                    // time log sub-sections are actually states
+                    await handler.setStateAsync();
+                    continue;
+                }
+                if (handler instanceof SectionHandler) {
+                    // nested sub-section: recurse into its children
+                    const children = 'item' in item ? item.item : [];
+                    if (await this.handleContentItems(children, handler.id)) {
+                        shouldSave = true;
+                    }
+                    continue;
+                }
+                if (this.requestedUpdates.length === 0) {
+                    this.log.silly(`Setting state of ${handler.id}`);
+                    await handler.setStateAsync();
+                }
+                else {
+                    const updateIndex = this.requestedUpdates.findIndex((ch) => ch.id === handler.id);
+                    if (updateIndex >= 0) {
+                        const cmd = handler.createSetCommand(this.requestedUpdates[updateIndex].value);
+                        this.log.debug(`Sending ${cmd}`);
+                        (_a = this.getSentry()) === null || _a === void 0 ? void 0 : _a.addBreadcrumb({ type: 'http', category: 'ws', data: { url: cmd } });
+                        (_b = this.webSocket) === null || _b === void 0 ? void 0 : _b.send(cmd);
+                        this.requestedUpdates.splice(updateIndex);
+                        shouldSave = true;
+                    }
+                }
+            }
+            catch (error) {
+                this.log.error(`Couldn't handle '${parentId}' -> '${item.name[0]}': ${error}`);
+                (_c = this.getSentry()) === null || _c === void 0 ? void 0 : _c.captureException(error, { extra: { section: parentId, item } });
+            }
+        }
+        return shouldSave;
     }
     requestAllContent() {
         this.wsFailCounter = 0;
@@ -528,12 +558,14 @@ class Luxtronik2 extends utils.Adapter {
                 return new SectionHandler(id, item, this);
             }
         }
-        if ('option' in item) {
+        if ('option' in item && 'raw' in item) {
             return new SelectHandler(id, item, this);
         }
-        if ('min' in item) {
+        if ('min' in item && 'max' in item && 'div' in item && 'raw' in item) {
             return new NumberHandler(id, item, this);
         }
+        // some firmware versions send partial items (e.g. "Abschaltung VD" in
+        // "Ablaufzeiten" has a "min" but no "raw"/"value"): fall back to read-only
         return new ReadOnlyHandler(id, item, this);
     }
     async setStateValueAsync(id, value) {
@@ -605,7 +637,7 @@ class TimeLogSectionHandler extends SectionHandler {
         });
     }
     async setStateAsync() {
-        const value = this.item.item.reduce((old, item) => ({ ...old, [item.name[0]]: item.value[0] }), {});
+        const value = this.item.item.reduce((old, item) => { var _a, _b; return ({ ...old, [item.name[0]]: (_b = (_a = item.value) === null || _a === void 0 ? void 0 : _a[0]) !== null && _b !== void 0 ? _b : '' }); }, {});
         await this.adapter.setStateValueAsync(this.id, JSON.stringify(value));
     }
 }
@@ -615,13 +647,14 @@ class ReadOnlyHandler extends ItemHandler {
         this.numberUnitMatch = /^(-?\d+(\.\d+)?|-+) ?(\D*)$/;
     }
     async extendObjectAsync() {
+        var _a;
         const common = {
             name: this.item.name[0],
             read: true,
             write: false,
         };
-        const value = this.item.value[0];
-        const match = value.match(this.numberUnitMatch);
+        const value = (_a = this.item.value) === null || _a === void 0 ? void 0 : _a[0];
+        const match = value === null || value === void 0 ? void 0 : value.match(this.numberUnitMatch);
         if (match) {
             common.type = 'number';
             if (match[3]) {
@@ -644,7 +677,13 @@ class ReadOnlyHandler extends ItemHandler {
         });
     }
     async setStateAsync() {
-        const value = this.item.value[0];
+        var _a;
+        const value = (_a = this.item.value) === null || _a === void 0 ? void 0 : _a[0];
+        if (value === undefined) {
+            // some firmware versions send items without a value (e.g. in "Ablaufzeiten")
+            await this.adapter.setStateValueAsync(this.id, null);
+            return;
+        }
         const match = value.match(this.numberUnitMatch);
         if (match) {
             const numberValue = match[1];
@@ -687,8 +726,13 @@ class SelectHandler extends ItemHandler {
         this.adapter.subscribeStates(this.id);
     }
     async setStateAsync() {
-        const value = parseInt(this.item.raw[0]);
-        await this.adapter.setStateValueAsync(this.id, value);
+        var _a;
+        const raw = (_a = this.item.raw) === null || _a === void 0 ? void 0 : _a[0];
+        if (raw === undefined) {
+            await this.adapter.setStateValueAsync(this.id, null);
+            return;
+        }
+        await this.adapter.setStateValueAsync(this.id, parseInt(raw));
     }
     createSetCommand(value) {
         return `SET;set_${this.item.$.id};${value}`;
@@ -696,7 +740,8 @@ class SelectHandler extends ItemHandler {
 }
 class NumberHandler extends ItemHandler {
     async extendObjectAsync() {
-        const unit = this.item.unit[0].trim();
+        var _a, _b, _c;
+        const unit = (_c = (_b = (_a = this.item.unit) === null || _a === void 0 ? void 0 : _a[0]) === null || _b === void 0 ? void 0 : _b.trim()) !== null && _c !== void 0 ? _c : '';
         const min = parseInt(this.item.min[0]);
         const max = parseInt(this.item.max[0]);
         const div = parseInt(this.item.div[0]);

@@ -1,7 +1,7 @@
 {
     "common": {
         "name": "luxtronik2",
-        "version": "0.4.2",
+        "version": "0.4.2-UKI",
         "news": {
             "0.4.2": {
                 "en": "Filtering out empty time log entries\nUpdated to the latest luxtronik2 dependency",
