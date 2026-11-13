@@ -5,5 +5,5 @@
     "password": "密码",
     "port": "WebSocket端口",
     "refreshInterval": "刷新间隔",
-    "seconds": "秒"
+    "seconds": "秒数"
 }
